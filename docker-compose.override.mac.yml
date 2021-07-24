@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  germes:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "6010:80"
+      - "6011:443"
+    volumes:
+      - ~/.aspnet/https:/root/.aspnet/https:ro
+      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+
+  ngrok:
+    environment:
+      - NGROK_AUTH=1gT6fH7Bmv3Kl4QvsI0o8mKTFD8_3fdQST1rNvU1tLDgFH4rM
+      - NGROK_LOOK_DOMAIN=germes
+      - NGROK_DEBUG=true
+    ports:
+      - "6020:4040"

@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  mysql:
+    image: mysql
+    networks:
+      - docker-network
+
+  back:
+    image: ${DOCKER_REGISTRY-}back
+    build:
+      context: .
+      dockerfile: src/ClientBarometer/Dockerfile
+    networks:
+      - docker-network
+
+  front:
+    image: node:12-alpine
+    command: sh -c "yarn start"
+    working_dir: /app
+    networks:
+      - docker-network
+
+networks:
+  docker-network:
+     driver: bridge
