@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  mysql:
+  db:
     image: mysql
     networks:
       - docker-network
@@ -16,7 +16,7 @@ services:
 
   front:
     image: node:12-alpine
-    command: sh -c "yarn start"
+    command: sh -c "CI=true yarn start"
     working_dir: /app
     networks:
       - docker-network

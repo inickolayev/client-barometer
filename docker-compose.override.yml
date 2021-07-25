@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  mysql:
+  db:
     image: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -9,7 +9,7 @@ services:
       - MYSQL_USER=test
       - MYSQL_PASSWORD=test_pass
     volumes:
-        - '/var/lib/mysql:./db'
+        - './db:/var/lib/mysql'
     ports:
       - "3306:3306"
 
@@ -17,6 +17,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
+      - Front__Url=http://front:3000
     ports:
       - "5000:80"
       - "5001:443"
