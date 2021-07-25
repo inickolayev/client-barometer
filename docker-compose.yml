@@ -16,7 +16,7 @@ services:
 
   front:
     image: node:12-alpine
-    command: sh -c "CI=true yarn start"
+    command: sh -c "REACT_APP_API_URL=http://back\:80 CI=true yarn start"
     working_dir: /app
     networks:
       - docker-network

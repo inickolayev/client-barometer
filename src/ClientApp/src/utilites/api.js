@@ -33,12 +33,13 @@ export const reloadIfLogOnRequired = (response) => {
 	}
 }
 
-const baseUrl = process.env.API_URL
+const baseUrl = process.env.REACT_APP_API_URL
 
 export async function safeFetch(input, init) {
 	try {
-        const url = `${baseUrl}/input`
-		const response = await fetch(input, init)
+        console.log(process.env);
+        const url = `${baseUrl}/${input}`
+		const response = await fetch(url)
 		reloadIfLogOnRequired(response)
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		const result = await response.json()
