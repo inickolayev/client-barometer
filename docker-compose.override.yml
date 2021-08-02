@@ -27,6 +27,6 @@ services:
 
   front:
     volumes:
-      - ./src/ClientApp:/app
+      - ./src/Front:/app
     ports:
       - 3000:3000

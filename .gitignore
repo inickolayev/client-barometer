@@ -254,3 +254,6 @@ _Pvt_Extensions
 
 # db files
 db/
+
+# Env
+.env.*
