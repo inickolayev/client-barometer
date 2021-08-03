@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { ApiService } from '../utilites/api/api';
 import ReactSpeedometer from "react-d3-speedometer"
+import { createUseStyles } from 'react-jss';
+import { ApiService } from '../utilites/api/api';
 
 type BarometerProps = {
 }
@@ -42,9 +43,15 @@ export class Barometer extends Component<BarometerProps, BarometerState> {
     render() {
         const { barometerValue } = this.state;
         return (
-            <div>
+            <div style={style}>
                 <ReactSpeedometer value={barometerValue} maxValue={maxValue} minValue={minValue} />
             </div>
         );
     }
 }
+
+const style = {
+    width: "40rem",
+    display: "flex",
+    justifyContent: "center"
+};

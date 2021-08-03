@@ -11,7 +11,7 @@ export class Layout extends Component {
       <div>
         <BrowserRouter>
           <NavMenu />
-          <Container>
+          <Container style={{ width: "100%", maxWidth: "100%", margin: 0, padding: 0 }}>
             {this.props.children}
           </Container>
         </BrowserRouter>
