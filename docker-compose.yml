@@ -3,6 +3,7 @@ version: '3.4'
 services:
   db:
     image: mysql
+    restart: unless-stopped
     networks:
       - docker-network
 
@@ -10,7 +11,8 @@ services:
     image: ${DOCKER_REGISTRY-}back
     build:
       context: .
-      dockerfile: src/ClientBarometer/Dockerfile
+      dockerfile: src/ClientBarometer/
+    restart: unless-stopped
     networks:
       - docker-network
 
@@ -18,6 +20,7 @@ services:
     image: node:12-alpine
     command: sh -c "CI=true yarn start"
     working_dir: /app
+    restart: unless-stopped
     networks:
       - docker-network
 
