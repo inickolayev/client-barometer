@@ -11,7 +11,7 @@ services:
     image: ${DOCKER_REGISTRY-}back
     build:
       context: .
-      dockerfile: src/ClientBarometer/
+      dockerfile: src/ClientBarometer/Dockerfile
     restart: unless-stopped
     networks:
       - docker-network
