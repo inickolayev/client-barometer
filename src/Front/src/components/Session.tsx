@@ -12,7 +12,7 @@ const containerStyle = {
 
 export const Session: React.FC = () => {
     return (<div style={containerStyle}>
-        <Chat />
+        <Chat room_id="123" username="some" />
         <Barometer />
     </div>);
 }

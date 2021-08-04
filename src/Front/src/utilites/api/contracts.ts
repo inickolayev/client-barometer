@@ -4,3 +4,11 @@ export type WeatherForecast = {
     temperatureF: number
     summary: string
 }
+
+export type ChatMessage = {
+    text: string;
+    username: string;
+    roomId: string;
+    createdAt?: Date;
+    id?: string;
+}
