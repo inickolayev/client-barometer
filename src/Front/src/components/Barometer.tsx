@@ -23,7 +23,7 @@ export class Barometer extends Component<BarometerProps, BarometerState> {
         super(props);
         this.state = { isLoading: true, barometer: 0 }
         this.loadData();
-        this.timer = setInterval(async () => await this.loadData(), 10);
+        this.timer = setInterval(async () => await this.loadData(), 1000);
     }
 
     async loadData() {
