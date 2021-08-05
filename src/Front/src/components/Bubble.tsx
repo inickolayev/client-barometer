@@ -29,6 +29,11 @@ const createStyles = (right?: boolean) => createUseStyles({
         alignItems: "center",
         justifyContent: "center"
     },
+    userIconText: {
+        margin: "0",
+        fontSize: "4rem",
+        marginBottom: "0.5rem"
+    },
     messageContainer: {
         padding: "1rem",
         margin: "0.5rem",
@@ -58,7 +63,7 @@ export const Bubble: React.FC<BubbleProps> = ({
     const classes = createStyles(right);
     return (
         <div className={classes.mainContainer}>
-            {!right && <div className={classes.userIcon}><p>{username?.substr(0,1).toUpperCase()}</p></div>}
+            {!right && <div className={classes.userIcon}><p className={classes.userIconText}>{username?.substr(0,1).toUpperCase()}</p></div>}
             <div className={classes.messageContainer}>
                 <p className={classes.message}>{message}</p>
             </div>

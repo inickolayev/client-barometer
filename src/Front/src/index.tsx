@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import registerServiceWorker from './registerServiceWorker'
+import registerServiceWorker from './registerServiceWorker';
+import 'antd/dist/antd.css';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -24,7 +24,12 @@ namespace ClientBarometer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddCors(options => options.AddPolicy("AllowOrigin", options => options. AllowAnyOrigin()));
+            services.AddCors(options => options.AddPolicy("AllowAll", conf =>
+            {
+                conf.AllowAnyOrigin();
+                conf.AllowAnyHeader();
+                conf.AllowAnyMethod();
+            }));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Storage API", Version = "v1" });
@@ -59,7 +64,7 @@ namespace ClientBarometer
 
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCors(options => options.AllowAnyOrigin()); 
+            app.UseCors("AllowAll"); 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
