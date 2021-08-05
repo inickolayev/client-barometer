@@ -47,7 +47,7 @@ namespace ClientBarometer.Controllers
                 Username = new Random().Next() % 2 == 0 ? "another" : "some",
                 CreatedAt = DateTime.UtcNow
             });
-        }, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
+        }, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(60));
 
         private readonly ILogger<SessionController> _logger;
         

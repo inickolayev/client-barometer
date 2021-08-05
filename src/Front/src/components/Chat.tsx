@@ -60,7 +60,7 @@ export class Chat extends React.Component<ChatProps, ChatState> {
         super(props);
         this.state = { isLoading: true, messages: [], newMessage: "" }
         this.loadData();
-        this.timer = setInterval(async () => await this.loadData(), 10);
+        this.timer = setInterval(async () => await this.loadData(), 1000);
     }
 
     async loadData() {
