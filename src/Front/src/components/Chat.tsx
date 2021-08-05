@@ -12,6 +12,7 @@ export interface ChatProps {
 export interface ChatState {
     messages: ChatMessage[];
     isLoading: boolean;
+    newMessage: string;
 }
 
 
@@ -34,7 +35,7 @@ export class Chat extends React.Component<ChatProps, ChatState> {
     constructor(props: ChatProps)
     {
         super(props);
-        this.state = { isLoading: true, messages: [] }
+        this.state = { isLoading: true, messages: [], newMessage: "" }
         this.loadData();
         this.timer = setInterval(async () => await this.loadData(), 10);
     }
@@ -46,8 +47,16 @@ export class Chat extends React.Component<ChatProps, ChatState> {
         }
     }
 
+    onSend() {
+        this.apiService.sendMessage(this.state.newMessage);
+    }
+
+    onMessageChange(message: string) {
+        this.setState({ newMessage: message });
+    }
+
     render() {
-        const { isLoading, messages } = this.state;
+        const { isLoading, messages, newMessage } = this.state;
         const { username } = this.props;
 
         return (
@@ -81,10 +90,10 @@ export class Chat extends React.Component<ChatProps, ChatState> {
                             )
                         } */}
                 </div>
-                {/* <form className="mx-auto w-screen flex p-10" onSubmit={handleSendMessage}>
-                    <input value={message} className="flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent rounded-r-none" onChange={({ target: { value } }) => setMessage(value)} placeholder="Message..." />
-                    <input type="submit" value="Send" className={`transition-all delay-300 ease flex-shrink-0 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200 rounded-l-none bg-purple-600`} />
-                </form> */}
+                <div className="mx-auto w-screen flex p-10">
+                    <input value={newMessage} className="flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent rounded-r-none" onChange={({ target: { value } }) => this.onMessageChange(value)} placeholder="Message..." />
+                    <button className={`transition-all delay-300 ease flex-shrink-0 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200 rounded-l-none bg-purple-600`} onClick={() => this.onSend()}>Send</button>
+                </div>
             </>
         );
     }

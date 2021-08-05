@@ -63,14 +63,16 @@ export async function safeFetch<T = void>(input: RequestInfo, init?: RequestInit
 
 export async function safeCommonFetch(input: RequestInfo, init?: RequestInit): Promise<NoDataResult> {
 	try {
-		const response = await fetch(input, init)
+		const url = `${baseurl}/${input}`
+		const response = await fetch(url, init)
 		reloadIfLogOnRequired(response)
 		if (response.ok) {
 			return {
 				success: true,
 			}
 		}
-	} catch {
+	} catch(e) {
+		console.error(e);
 		// empty catch because something went horribly wrong and we don't care what exactly broken
 		// here goes moe advanced exception handling and logging
 	}

@@ -47,7 +47,7 @@ namespace ClientBarometer.Controllers
                 Username = new Random().Next() % 2 == 0 ? "another" : "some",
                 CreatedAt = DateTime.UtcNow
             });
-        }, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1));
+        }, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
 
         private readonly ILogger<SessionController> _logger;
         
@@ -59,6 +59,21 @@ namespace ClientBarometer.Controllers
         [HttpGet("messages")]
         public IEnumerable<ChatMessage> GetMessages()
             => Messages;
+                
+        [HttpPost("send")]
+        public IActionResult SendMessage([FromBody]SendMessageRequest request)
+        {
+            var newMessage = new ChatMessage
+            {
+                Id = Messages.Count().ToString(),
+                RoomId = "123",
+                CreatedAt = DateTime.UtcNow,
+                Text = request.Text,
+                Username = "some"
+            };
+            Messages.Push(newMessage);
+            return Ok();
+        }
         
         [HttpGet("barometer")]
         public int GetBarometerValue()
