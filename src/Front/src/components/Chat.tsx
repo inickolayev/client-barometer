@@ -4,6 +4,7 @@ import { ChatMessage } from '../utilites/api/contracts';
 import { Bubble } from './Bubble'
 import { ApiService } from '../utilites/api/api'
 import { Input, Button, message } from 'antd'
+import { SendOutlined } from '@ant-design/icons';
 
 export interface ChatProps {
     username: string;
@@ -46,7 +47,8 @@ const inputStyle = {
 }
 
 const sendButtonStyle = {
-    width: "10rem",
+    display: "flex",
+    alignItems: "center"
 }
 
 export class Chat extends React.Component<ChatProps, ChatState> {
@@ -117,7 +119,7 @@ export class Chat extends React.Component<ChatProps, ChatState> {
                         onChange={({ target: { value } }) => this.onMessageChange(value)}
                         placeholder="Message..."
                     />
-                    <Button style={sendButtonStyle} htmlType="submit">Send</Button>
+                    <Button style={sendButtonStyle} htmlType="submit" icon={<SendOutlined/>} >Send</Button>
                 </form>
             </div>
         );
