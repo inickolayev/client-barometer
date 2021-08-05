@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
-import React, { FormEvent } from 'react'
+import React, { CSSProperties, FormEvent } from 'react'
 import { ChatMessage } from '../utilites/api/contracts';
 import { Bubble } from './Bubble'
 import { ApiService } from '../utilites/api/api'
+import { Input, Button, message } from 'antd'
 
 export interface ChatProps {
     username: string;
@@ -15,18 +16,38 @@ export interface ChatState {
     newMessage: string;
 }
 
+const mainContainerStyle :  CSSProperties = {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column"
+}
 
-const classes = {
-    mainContainer: {
-        width: "100%",
-        display: "flex",
-        flex: "1 1 0%",
-        flexDirection: "column-reverse",
-        overflow: "auto",
-        paddingLeft: "2.5rem",
-        paddingRight: "2.5rem"
-    },
+const chatContainerStyle : CSSProperties = {
+    width: "100%",
+    display: "flex",
+    flex: "1 1 0%",
+    flexDirection: 'column-reverse',
+    overflow: "auto",
+    paddingLeft: "2.5rem",
+    paddingRight: "2.5rem",
+    paddingBottom: "1rem"
 };
+
+const formStyle = {
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "100%",
+    display: "flex",
+    padding: "2.5rem",
+}
+
+const inputStyle = {
+    width: "100%",
+}
+
+const sendButtonStyle = {
+    width: "10rem",
+}
 
 export class Chat extends React.Component<ChatProps, ChatState> {
     apiService = new ApiService();
@@ -47,9 +68,14 @@ export class Chat extends React.Component<ChatProps, ChatState> {
         }
     }
 
-    onSend(e: FormEvent<HTMLFormElement>) {
+    async onSend(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        this.apiService.sendMessage(this.state.newMessage);
+        const resp = await this.apiService.sendMessage(this.state.newMessage);
+        if (resp.success) {
+            this.setState({ newMessage: "" })
+        } else {
+            message.error("Error sending message")
+        }
     }
 
     onMessageChange(message: string) {
@@ -61,16 +87,8 @@ export class Chat extends React.Component<ChatProps, ChatState> {
         const { username } = this.props;
 
         return (
-            <>
-                <div style={{
-                    width: "100%",
-                    display: "flex",
-                    flex: "1 1 0%",
-                    flexDirection: "column-reverse",
-                    overflow: "auto",
-                    paddingLeft: "2.5rem",
-                    paddingRight: "2.5rem"
-                }}>
+            <div style={mainContainerStyle}>
+                <div style={chatContainerStyle}>
                     {
                         isLoading
                         ? "loading..."
@@ -91,11 +109,17 @@ export class Chat extends React.Component<ChatProps, ChatState> {
                             )
                         } */}
                 </div>
-                <form className="mx-auto w-screen flex p-10" onSubmit={(e) => this.onSend(e)}>
-                    <input value={newMessage} className="flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent rounded-r-none" onChange={({ target: { value } }) => this.onMessageChange(value)} placeholder="Message..." />
-                    <button type="submit" className={`transition-all delay-300 ease flex-shrink-0 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200 rounded-l-none bg-purple-600`}>Send</button>
+                <form style={formStyle} onSubmit={(e) => this.onSend(e)}>
+                    <Input
+                        required={true}
+                        style={inputStyle}
+                        value={newMessage}
+                        onChange={({ target: { value } }) => this.onMessageChange(value)}
+                        placeholder="Message..."
+                    />
+                    <Button style={sendButtonStyle} htmlType="submit">Send</Button>
                 </form>
-            </>
+            </div>
         );
     }
 }
