@@ -1,9 +1,17 @@
 using System;
 using ClientBarometer.Configurations;
+using ClientBarometer.DataAccess;
+using ClientBarometer.Domain.Repositories;
+using ClientBarometer.Domain.Services;
+using ClientBarometer.Domain.UnitsOfWork;
+using ClientBarometer.Implementations.Repositories;
+using ClientBarometer.Implementations.Services;
+using ClientBarometer.Implementations.UnitsOfWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +31,10 @@ namespace ClientBarometer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("MySqlConnection");
+            services
+                .AddDbContext<ClientBarometerDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            
             services.AddControllersWithViews();
             services.AddCors(options => options.AddPolicy("AllowAll", conf =>
             {
@@ -34,12 +46,21 @@ namespace ClientBarometer
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Storage API", Version = "v1" });
             });
+
+            // Services
+            services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IChatReadRepository, ChatReadRepository>();
+            services.AddScoped<IMessageReadRepository, MessageReadRepository>();
+            services.AddScoped<IUserReadRepository, UserReadRepository>();
+            services.AddScoped<IChatUnitOfWork, ChatUnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var frontConfig = Configuration.GetSection("Front").Get<FrontConfig>();
+            
+            UpdateDatabase(app);
 
             if (env.IsDevelopment())
             {
@@ -51,7 +72,7 @@ namespace ClientBarometer
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -73,6 +94,19 @@ namespace ClientBarometer
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+        }
+        
+        private void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<ClientBarometerDbContext>())
+                {
+                    context?.Database.Migrate();
+                }
+            }
         }
     }
 }

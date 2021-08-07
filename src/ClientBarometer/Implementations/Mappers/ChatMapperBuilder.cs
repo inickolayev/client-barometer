@@ -1,5 +1,8 @@
 using AutoMapper;
 using ClientBarometer.Common.Abstractions.Mappers;
+using Models = ClientBarometer.Domain.Models;
+using Requests = ClientBarometer.Contracts.Requests;
+using Responses = ClientBarometer.Contracts.Responses;
 
 namespace ClientBarometer.Implementations.Mappers
 {
@@ -7,14 +10,12 @@ namespace ClientBarometer.Implementations.Mappers
     {
         public static MapperConfiguration MapperConfiguration => new MapperConfiguration(c =>
         {
-            // c.CreateMap<StaffStatus, EditableStaffStatus>();
-            // c.CreateMap<Domain.Models.Status, Status>();
-            // c.CreateMap<Dodo.ClientSite.LegacyFacade.Contracts.Components.EmployeeProfile.v1.Employee,
-            //         Dodo.Staff.Vaccination.Contracts.Outbound.StaffStatus>()
-            //     .ForMember(s => s.UnitId, opt => opt.MapFrom(e => Uuid.Parse(e.UnitUUId.ToString())))
-            //     .ForMember(s => s.StaffId, opt => opt.MapFrom(e => Uuid.Parse(e.UUId.ToString())))
-            //     .ForMember(s => s.Id, opt => opt.Ignore());
-            // c.CreateMap<StaffStatus, Dodo.Staff.Vaccination.Contracts.Outbound.StaffStatus>();
+            c.CreateMap<Requests.CreateChatRequest, Models.Chat>();
+            c.CreateMap<Requests.CreateUserRequest, Models.User>();
+            c.CreateMap<Requests.CreateMessageRequest, Models.Message>();
+            c.CreateMap<Models.Message, Responses.Message>();
+            c.CreateMap<Models.Chat, Responses.Chat>();
+            c.CreateMap<Models.User, Responses.User>();
         });
 
         public IMapper Please => MapperConfiguration.CreateMapper();

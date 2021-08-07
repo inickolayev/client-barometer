@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClientBarometer.DataAccess;
 using ClientBarometer.Domain.Models;
 using ClientBarometer.Domain.Repositories;
 using Microsoft.AspNetCore.SignalR;
@@ -17,11 +18,11 @@ namespace ClientBarometer.Implementations.Repositories
         private readonly IQueryable<Message> _messages;
         private readonly IQueryable<User> _users;
 
-        public UserReadRepository(IQueryable<User> users, IQueryable<Chat> chats, IQueryable<Message> messages)
+        public UserReadRepository(ClientBarometerDbContext dbContext)
         {
-            _chats = chats.AsNoTracking();
-            _messages = messages.AsNoTracking();
-            _users = users.AsNoTracking();
+            _chats = dbContext.Chats.AsNoTracking();
+            _messages = dbContext.Messages.AsNoTracking();
+            _users = dbContext.Users.AsNoTracking();
         }
         
         public async Task<User> Get(Guid userId, CancellationToken cancellationToken)
@@ -45,7 +46,7 @@ namespace ClientBarometer.Implementations.Repositories
         public async Task<User[]> GetUsers(Guid chatId, int skip, int take, CancellationToken cancellationToken)
             => await _messages.Where(m => m.ChatId == chatId)
                 .GroupBy(m => m.UserId)
-                .Select(m => m.Key)
+                .Select(gr => gr.Key)
                 .Join(_users, userId => userId, user => user.Id, (userId, user) => user)
                 .Skip(skip)
                 .Take(take)

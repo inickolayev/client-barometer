@@ -1,4 +1,5 @@
-﻿using ClientBarometer.Domain.Models;
+﻿using ClientBarometer.Domain.Constants;
+using ClientBarometer.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 
@@ -23,6 +24,13 @@ namespace ClientBarometer.DataAccess.Maps
 
             entityBuilder.Property(_ => _.RowVersion)
                 .IsRowVersion();
+
+            entityBuilder.HasData(new Chat
+            {
+                Id = ChatConsts.DEFAULT_CHAT_ID,
+                SourceId = ChatConsts.DEFAULT_CHAT_ID,
+                Source = "Telegram"
+            });
 
             return modelBuilder;
         }

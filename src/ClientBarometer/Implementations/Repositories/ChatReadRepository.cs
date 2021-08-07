@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClientBarometer.DataAccess;
 using ClientBarometer.Domain.Models;
 using ClientBarometer.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +14,9 @@ namespace ClientBarometer.Implementations.Repositories
     {
         private readonly IQueryable<Chat> _chats;
 
-        public ChatReadRepository(IQueryable<Chat> chats)
+        public ChatReadRepository(ClientBarometerDbContext dbContext)
         {
-            _chats = chats.AsNoTracking();
+            _chats = dbContext.Chats.AsNoTracking();
         }
         
         public async Task<Chat> Get(Guid chatId, CancellationToken cancellationToken)

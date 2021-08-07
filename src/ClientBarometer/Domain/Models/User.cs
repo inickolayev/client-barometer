@@ -12,8 +12,10 @@ namespace ClientBarometer.Domain.Models
         [Required]
         public string Source { get; set; }
         public string Name { get; set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime Birthday { get; set; }
         [Timestamp]
         public byte[] RowVersion { get; private set; }
+
     }
 }

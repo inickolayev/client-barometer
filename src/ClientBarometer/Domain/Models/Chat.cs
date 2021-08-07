@@ -11,6 +11,7 @@ namespace ClientBarometer.Domain.Models
         public Guid SourceId { get; set; }
         [Required]
         public string Source { get; set; }
+        public DateTime CreatedAt { get; set; }
         [Timestamp]
         public byte[] RowVersion { get; private set; }
     }

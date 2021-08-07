@@ -7,14 +7,14 @@ using ClientBarometer.Implementations.Repositories;
 
 namespace ClientBarometer.Implementations.UnitsOfWork
 {
-    public class ChatsUnitOfWork : IChatUnitOfWork
+    public class ChatUnitOfWork : IChatUnitOfWork
     {
         private readonly ClientBarometerDbContext _dbContext;
         public IMessageRegisterRepository Messages { get; }
         public IChatRegisterRepository Chats { get; }
         public IUserRegisterRepository Users { get; }
         
-        public ChatsUnitOfWork(ClientBarometerDbContext dbContext)
+        public ChatUnitOfWork(ClientBarometerDbContext dbContext)
         {
             _dbContext = dbContext;
             Messages = new MessageRegisterRepository(dbContext.Messages);
