@@ -27,7 +27,7 @@ namespace ClientBarometer.Implementations.Repositories
             => await _chats
                 .AnyAsync(ch => ch.Id == chatId, cancellationToken);
         
-        public async Task<bool> ContainsBySource(Guid sourceId, CancellationToken cancellationToken)
+        public async Task<bool> ContainsBySource(string sourceId, CancellationToken cancellationToken)
             => await _chats
                 .AnyAsync(ch => ch.SourceId == sourceId, cancellationToken);
 

@@ -8,7 +8,7 @@ namespace ClientBarometer.Domain.Models
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public Guid SourceId { get; set; }
+        public string SourceId { get; set; }
         [Required]
         public string Source { get; set; }
         public string Name { get; set; }

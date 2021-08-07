@@ -6,9 +6,9 @@ namespace ClientBarometer.Implementations.Exceptions
 {
     public class UserAlreadyExistsException : Exception
     {
-        public Guid SourceId { get; }
+        public string SourceId { get; }
 
-        public UserAlreadyExistsException(Guid sourceId, string message = "")
+        public UserAlreadyExistsException(string sourceId, string message = "")
             : base(message)
         {
             SourceId = sourceId;

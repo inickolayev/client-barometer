@@ -6,9 +6,9 @@ namespace ClientBarometer.Implementations.Exceptions
 {
     public class ChatAlreadyExistsException : Exception
     {
-        public Guid SourceId { get; }
+        public string SourceId { get; }
 
-        public ChatAlreadyExistsException(Guid sourceId, string message = "")
+        public ChatAlreadyExistsException(string sourceId, string message = "")
             : base(message)
         {
             SourceId = sourceId;

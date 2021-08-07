@@ -9,7 +9,7 @@ namespace ClientBarometer.Domain.Repositories
     {
         Task<User> Get(Guid userId, CancellationToken cancellationToken);
         Task<bool> Contains(Guid userId, CancellationToken cancellationToken);
-        Task<bool> ContainsBySource(Guid sourceId, CancellationToken cancellationToken);
+        Task<bool> ContainsBySource(string sourceId, CancellationToken cancellationToken);
         Task<User[]> GetUsers(int skip, int take, CancellationToken cancellationToken);
         Task<User[]> GetUsers(Guid chatId, int skip, int take, CancellationToken cancellationToken);
     }

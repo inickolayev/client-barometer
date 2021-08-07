@@ -35,6 +35,8 @@ namespace ClientBarometer.Controllers
         [HttpPost("send")]
         public async Task<IActionResult> SendMessage([FromBody]CreateMessageRequest request, CancellationToken cancellationToken)
         {
+            request.UserId = ChatConsts.DEFAULT_USER_ID;
+            request.ChatId = ChatConsts.DEFAULT_CHAT_ID;
             await _chatService.CreateMessage(request, cancellationToken);
             return Ok();
         }
@@ -44,7 +46,7 @@ namespace ClientBarometer.Controllers
         {
             var messages = await _chatService.GetMessages(ChatConsts.DEFAULT_CHAT_ID, ChatConsts.MESSAGES_TAKE_DEFAULT, cancellationToken);
             var result = messages.Sum(m =>
-                    m.Text.Count(ch => int.TryParse(ch.ToString(), out var intVal) && intVal % 2 == 0) * 10
+                    m?.Text?.Count(ch => int.TryParse(ch.ToString(), out var intVal) && intVal % 2 == 0) * 10 ?? 0
                 ) % 1000;
             return result;
         }

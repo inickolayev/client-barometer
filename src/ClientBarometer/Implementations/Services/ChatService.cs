@@ -61,7 +61,7 @@ namespace ClientBarometer.Implementations.Services
             var users = await _userReadRepository.GetUsers(chatId, 0, int.MaxValue, cancellationToken);
             var result = ChatMapper.Map<Responses.Message[]>(messages);
             foreach (var mess in result)
-                mess.Username = users.FirstOrDefault(us => us.Id == mess.Id)?.Name ?? "Unknown user";
+                mess.Username = users.FirstOrDefault(us => us.Id == mess.UserId)?.Name ?? "Unknown user";
             return result;
         }
 
@@ -110,7 +110,7 @@ namespace ClientBarometer.Implementations.Services
         {
             var newUser = ChatMapper.Map<User>(request);
 
-            if (!await _chatReadRepository.ContainsBySource(request.SourceId, cancellationToken))
+            if (!await _userReadRepository.ContainsBySource(request.SourceId, cancellationToken))
             {
                 throw new UserAlreadyExistsException(request.SourceId);
             }

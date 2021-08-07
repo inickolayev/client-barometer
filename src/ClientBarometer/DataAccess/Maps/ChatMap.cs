@@ -16,6 +16,7 @@ namespace ClientBarometer.DataAccess.Maps
 
             // Indexes
             entityBuilder.HasIndex(_ => _.Id);
+            entityBuilder.HasIndex(_ => _.SourceId);
 
             // Values
             entityBuilder.Property(_ => _.Id)
@@ -28,7 +29,7 @@ namespace ClientBarometer.DataAccess.Maps
             entityBuilder.HasData(new Chat
             {
                 Id = ChatConsts.DEFAULT_CHAT_ID,
-                SourceId = ChatConsts.DEFAULT_CHAT_ID,
+                SourceId = ChatConsts.DEFAULT_USER_ID.ToString(),
                 Source = "Telegram"
             });
 
