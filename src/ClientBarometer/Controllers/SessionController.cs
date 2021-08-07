@@ -15,16 +15,16 @@ namespace ClientBarometer.Controllers
     [Route("session")]
     public class SessionController : ControllerBase
     {
-        private static readonly ConcurrentStack<ChatMessage> Messages = new ConcurrentStack<ChatMessage>(new[]
+        private static readonly ConcurrentStack<Message> Messages = new ConcurrentStack<Message>(new[]
         {
-            new ChatMessage {
+            new Message {
                 Id = "0",
                 RoomId = "123",
                 Text = "Hello",
                 Username = "another",
                 CreatedAt = DateTime.UtcNow
             },
-            new ChatMessage {
+            new Message {
                 Id = "1",
                 RoomId = "123",
                 Text = "World",
@@ -39,7 +39,7 @@ namespace ClientBarometer.Controllers
             {
                 Messages.Clear();
             }
-            Messages.Push(new ChatMessage
+            Messages.Push(new Message
             {
                 Id = Messages.Count.ToString(),
                 RoomId = "123",
@@ -57,13 +57,13 @@ namespace ClientBarometer.Controllers
         }
 
         [HttpGet("messages")]
-        public IEnumerable<ChatMessage> GetMessages()
+        public IEnumerable<Message> GetMessages()
             => Messages;
                 
         [HttpPost("send")]
-        public IActionResult SendMessage([FromBody]SendMessageRequest request)
+        public IActionResult SendMessage([FromBody]CreateMessageRequest request)
         {
-            var newMessage = new ChatMessage
+            var newMessage = new Message
             {
                 Id = Messages.Count().ToString(),
                 RoomId = "123",
