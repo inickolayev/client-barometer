@@ -13,6 +13,7 @@ using ClientBarometer.Implementations.Exceptions;
 using ClientBarometer.Implementations.Mappers;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Telegram.Bot;
 using Requests = ClientBarometer.Contracts.Requests;
 using Responses = ClientBarometer.Contracts.Responses;
 
@@ -25,10 +26,10 @@ namespace ClientBarometer.Implementations.Services
         private readonly IUserReadRepository _userReadRepository;
         private readonly IChatUnitOfWork _chatUnitOfWork;
         private readonly ILogger<ChatService> _logger;
+        
         private readonly Timer _timer;
 
         private static IMapper ChatMapper => Create.ChatMapper.Please;
-
 
         public ChatService(
             IMessageReadRepository messageReadRepository,
@@ -72,16 +73,20 @@ namespace ClientBarometer.Implementations.Services
         {
             var newMessage = ChatMapper.Map<Message>(request);
 
-            if (!await _chatReadRepository.Contains(request.ChatId, cancellationToken))
+            if (!await _chatReadRepository.Contains(request.ChatSourceId, cancellationToken))
             {
-                throw new ChatNotFoundException(request.ChatId);
+                throw new ChatNotFoundException(request.ChatSourceId);
             }
-            if (!await _userReadRepository.Contains(request.UserId, cancellationToken))
+            var chat = await _chatReadRepository.Get(request.ChatSourceId, cancellationToken);
+            if (!await _userReadRepository.Contains(request.UserSourceId, cancellationToken))
             {
-                throw new UserNotFoundException(request.UserId);
+                throw new UserNotFoundException(request.UserSourceId);
             }
+            var user = await _userReadRepository.Get(request.UserSourceId, cancellationToken);
             
             newMessage.CreatedAt = DateTime.Now;
+            newMessage.ChatId = chat.Id;
+            newMessage.UserId = user.Id;
             _chatUnitOfWork.Messages.RegisterNew(newMessage);
 
             await _chatUnitOfWork.Complete(cancellationToken);
@@ -93,7 +98,7 @@ namespace ClientBarometer.Implementations.Services
         {
             var newChat = ChatMapper.Map<Chat>(request);
 
-            if (!await _chatReadRepository.ContainsBySource(request.SourceId, cancellationToken))
+            if (await _chatReadRepository.Contains(request.SourceId, cancellationToken))
             {
                 throw new ChatAlreadyExistsException(request.SourceId);
             }
@@ -110,7 +115,7 @@ namespace ClientBarometer.Implementations.Services
         {
             var newUser = ChatMapper.Map<User>(request);
 
-            if (!await _userReadRepository.ContainsBySource(request.SourceId, cancellationToken))
+            if (await _userReadRepository.Contains(request.SourceId, cancellationToken))
             {
                 throw new UserAlreadyExistsException(request.SourceId);
             }

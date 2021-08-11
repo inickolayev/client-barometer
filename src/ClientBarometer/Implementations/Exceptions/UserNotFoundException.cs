@@ -6,9 +6,9 @@ namespace ClientBarometer.Implementations.Exceptions
 {
     public class UserNotFoundException : Exception
     {
-        public Guid UserId { get; }
+        public string UserId { get; }
 
-        public UserNotFoundException(Guid userId, string message = "")
+        public UserNotFoundException(string userId, string message = "")
             : base(message)
         {
             UserId = userId;

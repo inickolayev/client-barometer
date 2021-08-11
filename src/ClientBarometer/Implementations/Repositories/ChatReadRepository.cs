@@ -12,10 +12,12 @@ namespace ClientBarometer.Implementations.Repositories
 {
     public class ChatReadRepository : IChatReadRepository
     {
+        private readonly ClientBarometerDbContext _dbContext;
         private readonly IQueryable<Chat> _chats;
 
         public ChatReadRepository(ClientBarometerDbContext dbContext)
         {
+            _dbContext = dbContext;
             _chats = dbContext.Chats.AsNoTracking();
         }
         
@@ -23,11 +25,15 @@ namespace ClientBarometer.Implementations.Repositories
             => await _chats
             .FirstOrDefaultAsync(ch => ch.Id == chatId, cancellationToken);
         
+        public async Task<Chat> Get(string sourceId, CancellationToken cancellationToken)
+            => await _chats
+                .FirstOrDefaultAsync(ch => ch.SourceId == sourceId, cancellationToken);
+
         public async Task<bool> Contains(Guid chatId, CancellationToken cancellationToken)
             => await _chats
                 .AnyAsync(ch => ch.Id == chatId, cancellationToken);
         
-        public async Task<bool> ContainsBySource(string sourceId, CancellationToken cancellationToken)
+        public async Task<bool> Contains(string sourceId, CancellationToken cancellationToken)
             => await _chats
                 .AnyAsync(ch => ch.SourceId == sourceId, cancellationToken);
 

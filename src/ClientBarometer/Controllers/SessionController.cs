@@ -20,11 +20,13 @@ namespace ClientBarometer.Controllers
     public class SessionController : ControllerBase
     {
         private readonly IChatService _chatService;
+        private readonly ISourceProcessor _sourceProcessor;
         private readonly ILogger<SessionController> _logger;
         
-        public SessionController(IChatService chatService, ILogger<SessionController> logger)
+        public SessionController(IChatService chatService, ISourceProcessor sourceProcessor, ILogger<SessionController> logger)
         {
             _chatService = chatService;
+            _sourceProcessor = sourceProcessor;
             _logger = logger;
         }
 
@@ -35,9 +37,11 @@ namespace ClientBarometer.Controllers
         [HttpPost("send")]
         public async Task<IActionResult> SendMessage([FromBody]CreateMessageRequest request, CancellationToken cancellationToken)
         {
-            request.UserId = ChatConsts.DEFAULT_USER_ID;
-            request.ChatId = ChatConsts.DEFAULT_CHAT_ID;
-            await _chatService.CreateMessage(request, cancellationToken);
+            request.UserSourceId = ChatConsts.DEFAULT_USER_SOURCE_ID;
+            request.ChatSourceId = ChatConsts.DEFAULT_CHAT_SOURCE_ID;
+            // TODO: Remove source attribute in "create to source"
+            request.Source = ChatConsts.TELEGRAM_SOURCE;
+            await _sourceProcessor.ProcessToSource(request, cancellationToken);
             return Ok();
         }
 

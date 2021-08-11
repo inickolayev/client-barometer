@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gifts.Api", "src\ClientBarometer\ClientBarometer.csproj", "{43A87CD0-CD5E-4568-8228-4119193A42D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "docker-compose", "docker-compose.dcproj", "{05AB90E7-21BF-4967-8637-08CC9741DF1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ngrok.Adapter", "src\Ngrok.Adapter\Ngrok.Adapter.csproj", "{006FFF61-7849-4515-8AB7-13B84EF044A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{43A87CD0-CD5E-4568-8228-4119193A42D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43A87CD0-CD5E-4568-8228-4119193A42D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43A87CD0-CD5E-4568-8228-4119193A42D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05AB90E7-21BF-4967-8637-08CC9741DF1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05AB90E7-21BF-4967-8637-08CC9741DF1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05AB90E7-21BF-4967-8637-08CC9741DF1B}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{05AB90E7-21BF-4967-8637-08CC9741DF1B}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{006FFF61-7849-4515-8AB7-13B84EF044A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{006FFF61-7849-4515-8AB7-13B84EF044A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{006FFF61-7849-4515-8AB7-13B84EF044A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{006FFF61-7849-4515-8AB7-13B84EF044A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

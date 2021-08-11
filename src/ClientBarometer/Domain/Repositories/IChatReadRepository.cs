@@ -8,8 +8,9 @@ namespace ClientBarometer.Domain.Repositories
     public interface IChatReadRepository
     {
         Task<Chat> Get(Guid chatId, CancellationToken cancellationToken);
+        Task<Chat> Get(string sourceId, CancellationToken cancellationToken);
         Task<bool> Contains(Guid chatId, CancellationToken cancellationToken);
-        Task<bool> ContainsBySource(string sourceId, CancellationToken cancellationToken);
+        Task<bool> Contains(string sourceId, CancellationToken cancellationToken);
         Task<Chat[]> GetChats(Guid chatId, int skip, int take, CancellationToken cancellationToken);
     }
 }

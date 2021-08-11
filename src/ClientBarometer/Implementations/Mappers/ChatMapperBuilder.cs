@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using ClientBarometer.Common.Abstractions.Mappers;
 using Models = ClientBarometer.Domain.Models;

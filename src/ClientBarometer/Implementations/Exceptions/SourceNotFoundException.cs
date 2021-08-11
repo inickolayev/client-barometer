@@ -4,14 +4,14 @@ using ClientBarometer.Common.Abstractions.Mappers;
 
 namespace ClientBarometer.Implementations.Exceptions
 {
-    public class ChatNotFoundException : Exception
+    public class SourceNotFoundException : Exception
     {
-        public string ChatId { get; }
+        public string Source { get; }
 
-        public ChatNotFoundException(string chatId, string message = "")
+        public SourceNotFoundException(string source, string message = "")
             : base(message)
         {
-            ChatId = chatId;
+            Source = source;
         }
     }
 }

@@ -4,6 +4,7 @@ using ClientBarometer.DataAccess;
 using ClientBarometer.Domain.Repositories;
 using ClientBarometer.Domain.Services;
 using ClientBarometer.Domain.UnitsOfWork;
+using ClientBarometer.Extensions;
 using ClientBarometer.Implementations.Repositories;
 using ClientBarometer.Implementations.Services;
 using ClientBarometer.Implementations.UnitsOfWork;
@@ -16,14 +17,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Ngrok.Adapter.Service;
+using Telegram.Bot;
 
 namespace ClientBarometer
 {
     public class Startup
     {
+        private readonly TelegramBotConfig _telegramBotConfig;
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _telegramBotConfig = configuration.GetSection("TelegramBot").Get<TelegramBotConfig>();
         }
 
         public IConfiguration Configuration { get; }
@@ -33,9 +39,9 @@ namespace ClientBarometer
         {
             var connectionString = Configuration.GetConnectionString("MySqlConnection");
             services
-                .AddDbContext<ClientBarometerDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-            
-            services.AddControllersWithViews();
+                .AddDbContext<ClientBarometerDbContext>(connectionString);
+
+            services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddCors(options => options.AddPolicy("AllowAll", conf =>
             {
                 conf.AllowAnyOrigin();
@@ -45,9 +51,17 @@ namespace ClientBarometer
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Storage API", Version = "v1" });
+                c.CustomSchemaIds(type => type.FullName);
             });
 
             // Services
+            
+            // Telegram
+            services.AddSingleton<INgrokService>(s => new NgrokService(_telegramBotConfig.NgrokHost));
+            services.AddScoped(serv => new TelegramBotClient(_telegramBotConfig.Token));
+            services.AddHostedService<TelegramBotInitService>();
+            
+            services.AddScoped<ISourceProcessor, SourceProcessor>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IChatReadRepository, ChatReadRepository>();
             services.AddScoped<IMessageReadRepository, MessageReadRepository>();
@@ -95,7 +109,7 @@ namespace ClientBarometer
                     pattern: "{controller}/{action=Index}/{id?}");
             });
         }
-        
+
         private void UpdateDatabase(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices

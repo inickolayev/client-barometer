@@ -29,12 +29,16 @@ namespace ClientBarometer.Implementations.Repositories
             => await _users
             .FirstOrDefaultAsync(us => us.Id == userId, cancellationToken);
 
+        public async Task<User> Get(string sourceId, CancellationToken cancellationToken)
+            => await _users
+                .FirstOrDefaultAsync(ch => ch.SourceId == sourceId, cancellationToken);
+
         public async Task<bool> Contains(Guid userId, CancellationToken cancellationToken)
             => await _users
                 .AnyAsync(us => us.Id == userId, cancellationToken);
         
-        public async Task<bool> ContainsBySource(string sourceId, CancellationToken cancellationToken)
-            => await _chats
+        public async Task<bool> Contains(string sourceId, CancellationToken cancellationToken)
+            => await _users
                 .AnyAsync(ch => ch.SourceId == sourceId, cancellationToken);
 
         public async Task<User[]> GetUsers(int skip, int take, CancellationToken cancellationToken)
