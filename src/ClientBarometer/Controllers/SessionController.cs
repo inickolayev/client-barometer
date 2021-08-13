@@ -5,6 +5,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClientBarometer.Contracts;
+using ClientBarometer.Contracts.Requests;
+using ClientBarometer.Contracts.Responses;
+using ClientBarometer.Domain.Constants;
+using ClientBarometer.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,71 +19,40 @@ namespace ClientBarometer.Controllers
     [Route("session")]
     public class SessionController : ControllerBase
     {
-        private static readonly ConcurrentStack<ChatMessage> Messages = new ConcurrentStack<ChatMessage>(new[]
-        {
-            new ChatMessage {
-                Id = "0",
-                RoomId = "123",
-                Text = "Hello",
-                Username = "another",
-                CreatedAt = DateTime.UtcNow
-            },
-            new ChatMessage {
-                Id = "1",
-                RoomId = "123",
-                Text = "World",
-                Username = "some",
-                CreatedAt = DateTime.UtcNow
-            }
-        });
-
-        private static readonly Timer Timer = new Timer(obj =>
-        {
-            if (Messages.Count() > 100)
-            {
-                Messages.Clear();
-            }
-            Messages.Push(new ChatMessage
-            {
-                Id = Messages.Count.ToString(),
-                RoomId = "123",
-                Text = new Random().Next().ToString(),
-                Username = new Random().Next() % 2 == 0 ? "another" : "some",
-                CreatedAt = DateTime.UtcNow
-            });
-        }, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(60));
-
+        private readonly IChatService _chatService;
+        private readonly ISourceProcessor _sourceProcessor;
         private readonly ILogger<SessionController> _logger;
         
-        public SessionController(ILogger<SessionController> logger)
+        public SessionController(IChatService chatService, ISourceProcessor sourceProcessor, ILogger<SessionController> logger)
         {
+            _chatService = chatService;
+            _sourceProcessor = sourceProcessor;
             _logger = logger;
         }
 
         [HttpGet("messages")]
-        public IEnumerable<ChatMessage> GetMessages()
-            => Messages;
+        public async Task<IEnumerable<Message>> GetMessages(CancellationToken cancellationToken)
+            => await _chatService.GetMessages(ChatConsts.DEFAULT_CHAT_ID, ChatConsts.MESSAGES_TAKE_DEFAULT, cancellationToken);
                 
         [HttpPost("send")]
-        public IActionResult SendMessage([FromBody]SendMessageRequest request)
+        public async Task<IActionResult> SendMessage([FromBody]CreateMessageRequest request, CancellationToken cancellationToken)
         {
-            var newMessage = new ChatMessage
-            {
-                Id = Messages.Count().ToString(),
-                RoomId = "123",
-                CreatedAt = DateTime.UtcNow,
-                Text = request.Text,
-                Username = "some"
-            };
-            Messages.Push(newMessage);
+            request.UserSourceId = ChatConsts.DEFAULT_USER_SOURCE_ID;
+            request.ChatSourceId = ChatConsts.DEFAULT_CHAT_SOURCE_ID;
+            // TODO: Remove source attribute in "create to source"
+            request.Source = ChatConsts.TELEGRAM_SOURCE;
+            await _sourceProcessor.ProcessToSource(request, cancellationToken);
             return Ok();
         }
-        
+
         [HttpGet("barometer")]
-        public int GetBarometerValue()
-            => (Messages.Sum(m =>
-                    m.Text.Count(ch =>
-                        int.TryParse(ch.ToString(), out var intVal) && intVal % 2 == 0)) * 10
-            ) % 1000;
+        public async Task<int> GetBarometerValue(CancellationToken cancellationToken)
+        {
+            var messages = await _chatService.GetMessages(ChatConsts.DEFAULT_CHAT_ID, ChatConsts.MESSAGES_TAKE_DEFAULT, cancellationToken);
+            var result = messages.Sum(m =>
+                    m?.Text?.Count(ch => int.TryParse(ch.ToString(), out var intVal) && intVal % 2 == 0) * 10 ?? 0
+                ) % 1000;
+            return result;
+        }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace ClientBarometer
+namespace ClientBarometer.Contracts.Responses
 {
     public class WeatherForecast
     {

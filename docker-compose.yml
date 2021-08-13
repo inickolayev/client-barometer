@@ -23,6 +23,12 @@ services:
     restart: unless-stopped
     networks:
       - docker-network
+        
+  ngrok:
+    image: wernight/ngrok
+    container_name: ngrok
+    networks:
+      - docker-network
 
 networks:
   docker-network:
