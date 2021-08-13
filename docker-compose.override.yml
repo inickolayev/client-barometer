@@ -4,10 +4,10 @@ services:
   db:
     image: mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=test_db
-      - MYSQL_USER=test
-      - MYSQL_PASSWORD=test_pass
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=client-barometer
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
         - './db:/var/lib/mysql'
     ports:
@@ -30,3 +30,12 @@ services:
       - ./src/Front:/app
     ports:
       - 3000:3000
+
+  ngrok:
+    environment:
+      - NGROK_AUTH=${NGROK_TOKEN}
+      - NGROK_LOOK_DOMAIN=${BACK_URL}
+      - NGROK_PORT=${BACK_PORT}
+      - NGROK_DEBUG=true
+    ports:
+      - "6020:4040"
