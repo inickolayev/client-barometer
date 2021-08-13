@@ -30,7 +30,7 @@ namespace ClientBarometer.DataAccess.Maps
             entityBuilder.HasData(new User
             {
                 Id = ChatConsts.DEFAULT_USER_ID,
-                SourceId = ChatConsts.DEFAULT_USER_ID.ToString(),
+                SourceId = ChatConsts.DEFAULT_USER_SOURCE_ID.ToString(),
                 Source = "Telegram",
                 Name = "Admin",
                 Birthday = DateTime.Parse("01.01.1990")
