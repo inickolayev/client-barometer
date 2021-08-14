@@ -8,5 +8,6 @@ namespace ClientBarometer.Contracts.Responses
         public Guid Id { get; set; }
         public string SourceId { get; set; }
         public string Source { get; set; }
+        public string Username { get; set; }
     }
 }

@@ -26,8 +26,6 @@ namespace ClientBarometer.Implementations.Services
         private readonly IUserReadRepository _userReadRepository;
         private readonly IChatUnitOfWork _chatUnitOfWork;
         private readonly ILogger<ChatService> _logger;
-        
-        private readonly Timer _timer;
 
         private static IMapper ChatMapper => Create.ChatMapper.Please;
 
@@ -43,15 +41,6 @@ namespace ClientBarometer.Implementations.Services
             _userReadRepository = userReadRepository;
             _chatUnitOfWork = chatUnitOfWork;
             _logger = logger;
-            // _timer = new Timer(async obj =>
-            // {
-            //     await CreateMessage(new Requests.CreateMessageRequest
-            //     {
-            //         ChatId = ChatConsts.DEFAULT_CHAT_ID,
-            //         UserId = ChatConsts.DEFAULT_USER_ID,
-            //         Text = new Random().Next().ToString(),
-            //     }, CancellationToken.None);
-            // }, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(60));
         }
 
         public async Task<Responses.Message[]> GetMessages(Guid chatId, int takeLast,
@@ -59,7 +48,7 @@ namespace ClientBarometer.Implementations.Services
         {
             var messages = 
                 await _messageReadRepository.GetLastMessages(chatId, takeLast, cancellationToken);
-            var users = await _userReadRepository.GetUsers(chatId, 0, int.MaxValue, cancellationToken);
+            var users = await _userReadRepository.GetUsers(chatId, cancellationToken);
             var result = ChatMapper.Map<Responses.Message[]>(messages);
             foreach (var mess in result)
                 mess.Username = users.FirstOrDefault(us => us.Id == mess.UserId)?.Name ?? "Unknown user";
@@ -67,13 +56,27 @@ namespace ClientBarometer.Implementations.Services
         }
 
         public async Task<Responses.User[]> GetUsers(Guid chatId, CancellationToken cancellationToken)
-            => ChatMapper.Map<Responses.User[]>(await _userReadRepository.GetUsers(chatId, 0, int.MaxValue, cancellationToken));
+            => ChatMapper.Map<Responses.User[]>(await _userReadRepository.GetUsers(chatId, cancellationToken));
+
+        public async Task<Responses.Chat[]> GetChats(CancellationToken cancellationToken)
+        {
+            var chats = ChatMapper.Map<Responses.Chat[]>(await _chatReadRepository.GetChats(0, int.MaxValue, cancellationToken));
+            foreach (var chat in chats)
+            {
+                var users = await _userReadRepository.GetUsers(chat.Id, cancellationToken);
+                var user = users.FirstOrDefault(u => u.SourceId != ChatConsts.DEFAULT_USER_SOURCE_ID);
+                chat.Username = user?.Name;
+            }
+
+            return chats;
+        }
 
         public async Task<Responses.Message> CreateMessage(Requests.CreateMessageRequest request, CancellationToken cancellationToken)
         {
             var newMessage = ChatMapper.Map<Message>(request);
 
-            if (!await _chatReadRepository.Contains(request.ChatSourceId, cancellationToken))
+            if (!await _chatReadRepository.Contains(request.ChatId, cancellationToken) &&
+                !await _chatReadRepository.Contains(request.ChatSourceId, cancellationToken))
             {
                 throw new ChatNotFoundException(request.ChatSourceId);
             }
@@ -85,7 +88,7 @@ namespace ClientBarometer.Implementations.Services
             var user = await _userReadRepository.Get(request.UserSourceId, cancellationToken);
             
             newMessage.CreatedAt = DateTime.Now;
-            newMessage.ChatId = chat.Id;
+            newMessage.ChatId = chat?.Id ?? request.ChatId;
             newMessage.UserId = user.Id;
             _chatUnitOfWork.Messages.RegisterNew(newMessage);
 

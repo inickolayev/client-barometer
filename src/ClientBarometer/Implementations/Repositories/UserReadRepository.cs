@@ -47,13 +47,11 @@ namespace ClientBarometer.Implementations.Repositories
             .Take(take)
             .ToArrayAsync(cancellationToken);
 
-        public async Task<User[]> GetUsers(Guid chatId, int skip, int take, CancellationToken cancellationToken)
+        public async Task<User[]> GetUsers(Guid chatId, CancellationToken cancellationToken)
             => await _messages.Where(m => m.ChatId == chatId)
                 .GroupBy(m => m.UserId)
                 .Select(gr => gr.Key)
                 .Join(_users, userId => userId, user => user.Id, (userId, user) => user)
-                .Skip(skip)
-                .Take(take)
                 .ToArrayAsync(cancellationToken);
     }
 }

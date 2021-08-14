@@ -8,7 +8,7 @@ import { SendOutlined } from '@ant-design/icons';
 
 export interface ChatProps {
     username: string;
-    room_id: string;
+    chatId: string;
 }
 
 export interface ChatState {
@@ -64,7 +64,8 @@ export class Chat extends React.Component<ChatProps, ChatState> {
     }
 
     async loadData() {
-        const newMessages = await this.apiService.getMessages();
+        const { chatId } = this.props;
+        const newMessages = await this.apiService.getMessages(chatId);
         if (newMessages.success) {
             await this.setState({ isLoading: false, messages: newMessages.data });
         }
@@ -72,7 +73,9 @@ export class Chat extends React.Component<ChatProps, ChatState> {
 
     async onSend(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const resp = await this.apiService.sendMessage(this.state.newMessage);
+        const { chatId } = this.props;
+        const { newMessage } = this.state;
+        const resp = await this.apiService.sendMessage(chatId, this.state.newMessage);
         if (resp.success) {
             this.setState({ newMessage: "" })
         } else {

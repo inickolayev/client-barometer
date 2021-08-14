@@ -13,6 +13,7 @@ namespace ClientBarometer.Domain.Services
     {
         Task<Responses.Message[]> GetMessages(Guid chatId, int takeLast = ChatConsts.MESSAGES_TAKE_DEFAULT, CancellationToken cancellationToken = default);
         Task<Responses.User[]> GetUsers(Guid chatId, CancellationToken cancellationToken);
+        Task<Responses.Chat[]> GetChats(CancellationToken cancellationToken);
         Task<Responses.Message> CreateMessage(CreateMessageRequest request, CancellationToken cancellationToken);
         Task<Responses.Chat> CreateChat(CreateChatRequest request, CancellationToken cancellationToken);
         Task<Responses.User> CreateUser(CreateUserRequest request, CancellationToken cancellationToken);
