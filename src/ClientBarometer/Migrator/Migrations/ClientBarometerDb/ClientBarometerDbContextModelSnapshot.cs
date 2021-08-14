@@ -15,7 +15,7 @@ namespace ClientBarometer.Migrator.Migrations.ClientBarometerDb
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.8");
+                .HasAnnotation("ProductVersion", "5.0.9");
 
             modelBuilder.Entity("ClientBarometer.Domain.Models.Chat", b =>
                 {
@@ -50,10 +50,10 @@ namespace ClientBarometer.Migrator.Migrations.ClientBarometerDb
                     b.HasData(
                         new
                         {
-                            Id = new Guid("550eb2cc-6b25-4239-9db3-992ba5cbee08"),
+                            Id = new Guid("8c43a70b-163c-4457-8cfa-42242bced8fa"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Source = "Telegram",
-                            SourceId = "550eb2cc-6b25-4239-9db3-992ba5cbee08"
+                            SourceId = "352328891"
                         });
                 });
 
@@ -135,7 +135,7 @@ namespace ClientBarometer.Migrator.Migrations.ClientBarometerDb
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Admin",
                             Source = "Telegram",
-                            SourceId = "70313da4-aa68-41d3-bf80-265e2743846f"
+                            SourceId = "Admin"
                         });
                 });
 #pragma warning restore 612, 618
