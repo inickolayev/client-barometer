@@ -4,6 +4,7 @@ import { createUseStyles } from 'react-jss';
 import { ApiService } from '../utilites/api/api';
 
 type BarometerProps = {
+    chatId: string
 }
 
 type BarometerState = {
@@ -27,7 +28,8 @@ export class Barometer extends Component<BarometerProps, BarometerState> {
     }
 
     async loadData() {
-        const newBarometer = await this.apiService.getBarometer();
+        const { chatId } = this.props
+        const newBarometer = await this.apiService.getBarometer(chatId);
         if (newBarometer.success) {
             await this.setState({ isLoading: false, barometer: newBarometer.data });
         }

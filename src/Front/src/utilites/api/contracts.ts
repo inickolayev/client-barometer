@@ -6,9 +6,22 @@ export type WeatherForecast = {
 }
 
 export type ChatMessage = {
+    id: string;
     text: string;
     username: string;
-    roomId: string;
+    chatId: string;
+    userId: string;
     createdAt?: Date;
-    id?: string;
+}
+
+export type Chat = {
+    id: string;
+    sourceId: string;
+    source: string;
+}
+
+export type User = {
+    id: string;
+    sourceId: string;
+    source: string;
 }

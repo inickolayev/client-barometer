@@ -4,7 +4,8 @@ import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
-import { Session } from './components/Session';
+import { ChatPage } from './components/ChatPage';
+import { Chats } from './components/Chats';
 
 import './App.css'
 
@@ -17,7 +18,8 @@ export default class App extends Component {
         <Route exact path='/' component={Home} />
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} />
-        <Route path='/chat' component={Session} />
+        <Route exact path='/chat/:chatId' component={ChatPage} />
+        <Route exact path='/chat' component={Chats} />
       </Layout>
     );
   }

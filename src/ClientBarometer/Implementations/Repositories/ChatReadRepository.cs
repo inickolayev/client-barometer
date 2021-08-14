@@ -37,9 +37,8 @@ namespace ClientBarometer.Implementations.Repositories
             => await _chats
                 .AnyAsync(ch => ch.SourceId == sourceId, cancellationToken);
 
-        public async Task<Chat[]> GetChats(Guid chatId, int skip, int take, CancellationToken cancellationToken)
+        public async Task<Chat[]> GetChats(int skip, int take, CancellationToken cancellationToken)
             => await _chats
-            .Where(ch => ch.Id == chatId)
             .Skip(skip)
             .Take(take)
             .ToArrayAsync(cancellationToken);

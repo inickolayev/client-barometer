@@ -60,7 +60,8 @@ namespace ClientBarometer.Implementations.Services
         private async Task ProcessToTelegram(CreateMessageRequest request, CancellationToken cancellationToken)
         {
             await _chatService.CreateMessage(request, cancellationToken);
-            await _tgClient.SendTextMessageAsync(request.ChatSourceId, request.Text,
+            var chat = await _chatReadRepository.Get(request.ChatId, cancellationToken);
+            await _tgClient.SendTextMessageAsync(chat.SourceId, request.Text,
                     cancellationToken: cancellationToken);
         }
 
