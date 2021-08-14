@@ -29,7 +29,7 @@ namespace ClientBarometer.DataAccess.Maps
             entityBuilder.HasData(new Chat
             {
                 Id = ChatConsts.DEFAULT_CHAT_ID,
-                SourceId = ChatConsts.DEFAULT_CHAT_ID.ToString(),
+                SourceId = ChatConsts.DEFAULT_CHAT_SOURCE_ID.ToString(),
                 Source = "Telegram"
             });
 

@@ -16,9 +16,11 @@ namespace ClientBarometer.Migrator.Migrations.ClientBarometerDb
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    SourceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SourceId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Source = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     RowVersion = table.Column<DateTime>(type: "timestamp(6)", rowVersion: true, nullable: true)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
                 },
@@ -52,11 +54,13 @@ namespace ClientBarometer.Migrator.Migrations.ClientBarometerDb
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    SourceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SourceId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Source = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Birthday = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     RowVersion = table.Column<DateTime>(type: "timestamp(6)", rowVersion: true, nullable: true)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
@@ -69,18 +73,23 @@ namespace ClientBarometer.Migrator.Migrations.ClientBarometerDb
 
             migrationBuilder.InsertData(
                 table: "chats",
-                columns: new[] { "Id", "Source", "SourceId" },
-                values: new object[] { new Guid("550eb2cc-6b25-4239-9db3-992ba5cbee08"), "Telegram", new Guid("550eb2cc-6b25-4239-9db3-992ba5cbee08") });
+                columns: new[] { "Id", "CreatedAt", "Source", "SourceId" },
+                values: new object[] { new Guid("8c43a70b-163c-4457-8cfa-42242bced8fa"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Telegram", "352328891" });
 
             migrationBuilder.InsertData(
                 table: "users",
-                columns: new[] { "Id", "Birthday", "Name", "Source", "SourceId" },
-                values: new object[] { new Guid("70313da4-aa68-41d3-bf80-265e2743846f"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", "Telegram", new Guid("70313da4-aa68-41d3-bf80-265e2743846f") });
+                columns: new[] { "Id", "Birthday", "CreatedAt", "Name", "Source", "SourceId" },
+                values: new object[] { new Guid("70313da4-aa68-41d3-bf80-265e2743846f"), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", "Telegram", "Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_chats_Id",
                 table: "chats",
                 column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_chats_SourceId",
+                table: "chats",
+                column: "SourceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_messages_ChatId",
@@ -101,6 +110,11 @@ namespace ClientBarometer.Migrator.Migrations.ClientBarometerDb
                 name: "IX_users_Id",
                 table: "users",
                 column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_SourceId",
+                table: "users",
+                column: "SourceId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
