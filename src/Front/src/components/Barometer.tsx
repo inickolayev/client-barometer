@@ -31,7 +31,7 @@ export class Barometer extends Component<BarometerProps, BarometerState> {
         const { chatId } = this.props
         const newBarometer = await this.apiService.getBarometer(chatId);
         if (newBarometer.success) {
-            await this.setState({ isLoading: false, barometer: newBarometer.data });
+            await this.setState({ isLoading: false, barometer: newBarometer.data.value });
         }
     }
 

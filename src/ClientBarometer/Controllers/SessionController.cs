@@ -21,16 +21,19 @@ namespace ClientBarometer.Controllers
     {
         private readonly IChatService _chatService;
         private readonly ISourceProcessor _sourceProcessor;
+        private readonly IBarometerService _barometerService;
         private readonly ISuggestionService _suggestionService;
         private readonly ILogger<SessionController> _logger;
         
         public SessionController(IChatService chatService,
             ISourceProcessor sourceProcessor,
+            IBarometerService barometerService,
             ISuggestionService suggestionService,
             ILogger<SessionController> logger)
         {
             _chatService = chatService;
             _sourceProcessor = sourceProcessor;
+            _barometerService = barometerService;
             _suggestionService = suggestionService;
             _logger = logger;
         }
@@ -64,14 +67,8 @@ namespace ClientBarometer.Controllers
         }
 
         [HttpGet("barometer")]
-        public async Task<int> GetBarometerValue(Guid chatId, CancellationToken cancellationToken)
-        {
-            var messages = await _chatService.GetMessages(chatId, ChatConsts.MESSAGES_TAKE_DEFAULT, cancellationToken);
-            var result = messages.Sum(m =>
-                    m?.Text?.Count(ch => int.TryParse(ch.ToString(), out var intVal) && intVal % 2 == 0) * 10 ?? 0
-                ) % 1000;
-            return result;
-        }
+        public async Task<BarometerValue> GetBarometerValue(Guid chatId, CancellationToken cancellationToken)
+            => await _barometerService.GetValue(chatId, cancellationToken);
 
 
         [HttpGet("suggestions")]

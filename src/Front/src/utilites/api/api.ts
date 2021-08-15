@@ -1,5 +1,5 @@
 import { Result } from "./commonContracts";
-import { WeatherForecast, ChatMessage, Chat, User, PersonalInfo, Suggestions } from "./contracts";
+import { WeatherForecast, ChatMessage, Chat, User, PersonalInfo, Suggestions, BarometerResult } from "./contracts";
 import { safeCommonFetch, safeFetch } from "./helpers";
 
 export class ApiService {
@@ -39,7 +39,7 @@ export class ApiService {
 	}
 
 	getBarometer = async (chatId: string) => {
-		const result = await safeFetch<number>(`session/barometer?chatId=${chatId}`, {
+		const result = await safeFetch<BarometerResult>(`session/barometer?chatId=${chatId}`, {
 			method: 'GET'
 		})
 		return result

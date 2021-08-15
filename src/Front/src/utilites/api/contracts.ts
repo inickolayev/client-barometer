@@ -20,6 +20,10 @@ export type Chat = {
     source: string;
 }
 
+export type BarometerResult = {
+    value: number;
+}
+
 export type Suggestions = {
     messages: string[];
 }
