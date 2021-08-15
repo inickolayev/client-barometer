@@ -12,6 +12,6 @@ namespace ClientBarometer.Domain.Repositories
         Task<bool> Contains(Guid userId, CancellationToken cancellationToken);
         Task<bool> Contains(string sourceId, CancellationToken cancellationToken);
         Task<User[]> GetUsers(int skip, int take, CancellationToken cancellationToken);
-        Task<User[]> GetUsers(Guid chatId, CancellationToken cancellationToken);
+        Task<User> GetUser(Guid chatId, CancellationToken cancellationToken);
     }
 }

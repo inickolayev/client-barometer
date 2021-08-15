@@ -25,3 +25,9 @@ export type User = {
     sourceId: string;
     source: string;
 }
+
+export type PersonalInfo = {
+    username: string;
+    name: string;
+    age: number;
+}

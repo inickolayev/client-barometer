@@ -51,11 +51,11 @@ namespace ClientBarometer.Controllers
             return Ok(chats);
         }
                 
-        [HttpGet("users")]
-        public async Task<IActionResult> GetUsers(Guid chatId, CancellationToken cancellationToken)
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUser(Guid chatId, CancellationToken cancellationToken)
         {
-            var users = await _chatService.GetUsers(chatId, cancellationToken);
-            return Ok(users);
+            var user = await _chatService.GetUser(chatId, cancellationToken);
+            return Ok(user);
         }
 
         [HttpGet("barometer")]

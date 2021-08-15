@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClientBarometer.DataAccess;
+using ClientBarometer.Domain.Constants;
 using ClientBarometer.Domain.Models;
 using ClientBarometer.Domain.Repositories;
 using Microsoft.AspNetCore.SignalR;
@@ -47,11 +48,11 @@ namespace ClientBarometer.Implementations.Repositories
             .Take(take)
             .ToArrayAsync(cancellationToken);
 
-        public async Task<User[]> GetUsers(Guid chatId, CancellationToken cancellationToken)
+        public async Task<User> GetUser(Guid chatId, CancellationToken cancellationToken)
             => await _messages.Where(m => m.ChatId == chatId)
                 .GroupBy(m => m.UserId)
                 .Select(gr => gr.Key)
                 .Join(_users, userId => userId, user => user.Id, (userId, user) => user)
-                .ToArrayAsync(cancellationToken);
+                .FirstOrDefaultAsync(user => user.SourceId != ChatConsts.DEFAULT_USER_SOURCE_ID, cancellationToken);
     }
 }
