@@ -68,7 +68,7 @@ namespace ClientBarometer.Implementations.Services
             foreach (var chat in chats)
             {
                 var users = await _userReadRepository.GetUsers(chat.Id, cancellationToken);
-                chat.Username = users.FirstOrDefault(user => user.SourceId == ChatConsts.DEFAULT_USER_SOURCE_ID)?.Name ?? "Unknown user";
+                chat.Username = users.FirstOrDefault(user => user.SourceId != ChatConsts.DEFAULT_USER_SOURCE_ID)?.Name ?? "Unknown user";
             }
 
             return chats;
