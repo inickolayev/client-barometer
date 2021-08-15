@@ -8,5 +8,6 @@ namespace ClientBarometer.Domain.UnitsOfWork
         IMessageRegisterRepository Messages { get; }
         IChatRegisterRepository Chats { get; }
         IUserRegisterRepository Users { get; }
+        IBarometerRegisterRepository BarometerValues { get; }
     }
 }

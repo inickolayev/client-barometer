@@ -25,6 +25,8 @@ namespace ClientBarometer.Implementations.Services
         private readonly IChatReadRepository _chatReadRepository;
         private readonly IUserReadRepository _userReadRepository;
         private readonly IChatUnitOfWork _chatUnitOfWork;
+        private readonly IBarometerReadRepository _barometerReadRepository;
+        private readonly IBarometerRegisterRepository _barometerRegisterRepository;
         private readonly ILogger<ChatService> _logger;
 
         private static IMapper ChatMapper => Create.ChatMapper.Please;

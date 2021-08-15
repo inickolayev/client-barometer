@@ -13,6 +13,7 @@ namespace ClientBarometer.Implementations.UnitsOfWork
         public IMessageRegisterRepository Messages { get; }
         public IChatRegisterRepository Chats { get; }
         public IUserRegisterRepository Users { get; }
+        public IBarometerRegisterRepository BarometerValues { get; }
         
         public ChatUnitOfWork(ClientBarometerDbContext dbContext)
         {
@@ -20,6 +21,7 @@ namespace ClientBarometer.Implementations.UnitsOfWork
             Messages = new MessageRegisterRepository(dbContext.Messages);
             Chats = new ChatRegisterRepository(dbContext.Chats);
             Users = new UserRegisterRepository(dbContext.Users);
+            BarometerValues = new BarometerRegisterRepository(dbContext.BarometerEntries);
         }
         
         public async Task Complete(CancellationToken ct)

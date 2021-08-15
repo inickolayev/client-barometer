@@ -83,6 +83,7 @@ namespace ClientBarometer
             
             // Repositories
             services.AddScoped<IChatReadRepository, ChatReadRepository>();
+            services.AddScoped<IBarometerReadRepository, BarometerReadRepository>();
             services.AddScoped<IMessageReadRepository, MessageReadRepository>();
             services.AddScoped<IUserReadRepository, UserReadRepository>();
             services.AddScoped<IChatUnitOfWork, ChatUnitOfWork>();
