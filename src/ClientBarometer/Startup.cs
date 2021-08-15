@@ -1,10 +1,12 @@
 using System;
 using ClientBarometer.Configurations;
 using ClientBarometer.DataAccess;
+using ClientBarometer.Domain.Clients;
 using ClientBarometer.Domain.Repositories;
 using ClientBarometer.Domain.Services;
 using ClientBarometer.Domain.UnitsOfWork;
 using ClientBarometer.Extensions;
+using ClientBarometer.Implementations.Clients;
 using ClientBarometer.Implementations.Repositories;
 using ClientBarometer.Implementations.Services;
 using ClientBarometer.Implementations.UnitsOfWork;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,11 +28,13 @@ namespace ClientBarometer
     public class Startup
     {
         private readonly TelegramBotConfig _telegramBotConfig;
+        private readonly PredictorConfig _predictorConfig;
         
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             _telegramBotConfig = configuration.GetSection("TelegramBot").Get<TelegramBotConfig>();
+            _predictorConfig = configuration.GetSection("Predictor").Get<PredictorConfig>();
         }
 
         public IConfiguration Configuration { get; }
@@ -54,17 +59,29 @@ namespace ClientBarometer
                 c.CustomSchemaIds(type => type.FullName);
             });
 
-            // Services
-            
             // Telegram
             services.AddSingleton<INgrokService>(s => new NgrokService(_telegramBotConfig.NgrokHost));
             services.AddScoped(serv => new TelegramBotClient(_telegramBotConfig.Token));
             services.AddHostedService<TelegramBotInitService>();
             
+            // Clients
+            services.AddHttpClient<IPredictorClient, PredictorClient>("predictor", c =>
+            {
+                c.BaseAddress = new Uri(_predictorConfig.Host);
+            });
+            
+            // Services
+            services.AddMemoryCache(entry =>
+            {
+                entry.ExpirationScanFrequency = TimeSpan.FromMinutes(20);
+            });
             services.AddScoped<ISourceProcessor, SourceProcessor>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IBarometerService, BarometerService>();
             services.AddScoped<ISuggestionService, SuggestionService>();
+            
+            // Repositories
             services.AddScoped<IChatReadRepository, ChatReadRepository>();
             services.AddScoped<IMessageReadRepository, MessageReadRepository>();
             services.AddScoped<IUserReadRepository, UserReadRepository>();

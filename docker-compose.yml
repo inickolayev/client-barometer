@@ -27,6 +27,16 @@ services:
   ngrok:
     image: wernight/ngrok
     container_name: ngrok
+    restart: unless-stopped
+    networks:
+      - docker-network
+
+  predictor:
+    image: ${DOCKER_REGISTRY-}predictor
+    build:
+      context: ./src/CustomerAgreementPredictor
+      dockerfile: src/CustomerAgreementPredictor/dockerfile
+    restart: unless-stopped
     networks:
       - docker-network
 

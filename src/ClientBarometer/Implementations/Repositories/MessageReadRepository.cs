@@ -26,6 +26,7 @@ namespace ClientBarometer.Implementations.Repositories
         public async Task<Message[]> GetMessages(Guid chatId, int skip, int take, CancellationToken cancellationToken)
             => await _messages
             .Where(ms => ms.ChatId == chatId)
+            .OrderByDescending(mes => mes.CreatedAt)
             .Skip(skip)
             .Take(take)
             .ToArrayAsync(cancellationToken);

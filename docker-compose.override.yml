@@ -39,3 +39,7 @@ services:
       - NGROK_DEBUG=true
     ports:
       - "6020:4040"
+
+  predictor:
+    ports:
+      - "5010:5000"
