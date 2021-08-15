@@ -1,0 +1,3 @@
+[submodule "src/CustomerAgreementPredictor"]
+	path = src/CustomerAgreementPredictor
+	url = git@https://github.com/inickolayev/client-barometer/tree/main/src
