@@ -48,11 +48,11 @@ namespace ClientBarometer.Implementations.Repositories
             .Take(take)
             .ToArrayAsync(cancellationToken);
 
-        public async Task<User> GetUser(Guid chatId, CancellationToken cancellationToken)
+        public async Task<User[]> GetUsers(Guid chatId, CancellationToken cancellationToken)
             => await _messages.Where(m => m.ChatId == chatId)
                 .GroupBy(m => m.UserId)
                 .Select(gr => gr.Key)
                 .Join(_users, userId => userId, user => user.Id, (userId, user) => user)
-                .FirstOrDefaultAsync(user => user.SourceId != ChatConsts.DEFAULT_USER_SOURCE_ID, cancellationToken);
+                .ToArrayAsync(cancellationToken);
     }
 }

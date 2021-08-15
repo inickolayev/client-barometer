@@ -1,5 +1,5 @@
 import { Result } from "./commonContracts";
-import { WeatherForecast, ChatMessage, Chat, User, PersonalInfo } from "./contracts";
+import { WeatherForecast, ChatMessage, Chat, User, PersonalInfo, Suggestions } from "./contracts";
 import { safeCommonFetch, safeFetch } from "./helpers";
 
 export class ApiService {
@@ -44,6 +44,13 @@ export class ApiService {
 		})
 		return result
 	}
+
+    getSuggestions = async (chatId: string) => {
+		const result = await safeFetch<Suggestions>(`session/suggestions?chatId=${chatId}`, {
+			method: 'GET'
+		})
+		return result
+    }
 	
 	sendMessage = async (chatId: string, message: string) => {
 		const result = await safeCommonFetch("session/send", {

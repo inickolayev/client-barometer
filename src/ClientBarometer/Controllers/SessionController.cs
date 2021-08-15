@@ -21,12 +21,17 @@ namespace ClientBarometer.Controllers
     {
         private readonly IChatService _chatService;
         private readonly ISourceProcessor _sourceProcessor;
+        private readonly ISuggestionService _suggestionService;
         private readonly ILogger<SessionController> _logger;
         
-        public SessionController(IChatService chatService, ISourceProcessor sourceProcessor, ILogger<SessionController> logger)
+        public SessionController(IChatService chatService,
+            ISourceProcessor sourceProcessor,
+            ISuggestionService suggestionService,
+            ILogger<SessionController> logger)
         {
             _chatService = chatService;
             _sourceProcessor = sourceProcessor;
+            _suggestionService = suggestionService;
             _logger = logger;
         }
 
@@ -67,5 +72,10 @@ namespace ClientBarometer.Controllers
                 ) % 1000;
             return result;
         }
+
+
+        [HttpGet("suggestions")]
+        public async Task<Suggestions> GetSuggestions(Guid chatId, CancellationToken cancellationToken)
+            => await _suggestionService.GetSuggestions(chatId, cancellationToken);
     }
 }

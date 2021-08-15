@@ -5,6 +5,7 @@ import { ApiService } from '../utilites/api/api';
 import { Barometer } from './Barometer';
 import { Chat } from './Chat'
 import { PersonalInfoCard } from './PersonalInfoCard';
+import { SuggestionsCard } from './SuggestionsCard';
 
 const containerStyle = {
     height: "calc(100vh - 90px)",
@@ -44,6 +45,7 @@ export const ChatPage: React.FC = () => {
         <div style={secondColumnStyle}>
             <PersonalInfoCard userId={userId} />
             <Barometer chatId={chatId} />
+            <SuggestionsCard chatId={chatId} />
         </div>
     </div>);
 }
