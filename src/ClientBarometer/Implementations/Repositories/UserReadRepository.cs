@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ClientBarometer.DataAccess;
+using ClientBarometer.Domain.Constants;
 using ClientBarometer.Domain.Models;
 using ClientBarometer.Domain.Repositories;
 using Microsoft.AspNetCore.SignalR;

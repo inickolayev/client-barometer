@@ -47,6 +47,7 @@ export class Barometer extends Component<BarometerProps, BarometerState> {
 
 const style = {
     width: "40rem",
+    height: "13rem",
     display: "flex",
     justifyContent: "center"
 };

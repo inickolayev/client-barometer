@@ -51,12 +51,16 @@ namespace ClientBarometer.Implementations.Services
             var users = await _userReadRepository.GetUsers(chatId, cancellationToken);
             var result = ChatMapper.Map<Responses.Message[]>(messages);
             foreach (var mess in result)
-                mess.Username = users.FirstOrDefault(us => us.Id == mess.UserId)?.Name ?? "Unknown user";
+                mess.Username = users.FirstOrDefault(user => mess.UserId == user.Id)?.Name ?? "Unknown user";
             return result;
         }
 
-        public async Task<Responses.User[]> GetUsers(Guid chatId, CancellationToken cancellationToken)
-            => ChatMapper.Map<Responses.User[]>(await _userReadRepository.GetUsers(chatId, cancellationToken));
+        public async Task<Responses.User> GetUser(Guid chatId, CancellationToken cancellationToken)
+        {
+            var users =  await _userReadRepository.GetUsers(chatId, cancellationToken);
+            var user = users.FirstOrDefault(us => us.SourceId != ChatConsts.DEFAULT_USER_SOURCE_ID);
+            return ChatMapper.Map<Responses.User>(user);
+        }
 
         public async Task<Responses.Chat[]> GetChats(CancellationToken cancellationToken)
         {
@@ -64,8 +68,7 @@ namespace ClientBarometer.Implementations.Services
             foreach (var chat in chats)
             {
                 var users = await _userReadRepository.GetUsers(chat.Id, cancellationToken);
-                var user = users.FirstOrDefault(u => u.SourceId != ChatConsts.DEFAULT_USER_SOURCE_ID);
-                chat.Username = user?.Name;
+                chat.Username = users.FirstOrDefault(user => user.SourceId == ChatConsts.DEFAULT_USER_SOURCE_ID)?.Name ?? "Unknown user";
             }
 
             return chats;

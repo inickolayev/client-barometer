@@ -63,6 +63,8 @@ namespace ClientBarometer
             
             services.AddScoped<ISourceProcessor, SourceProcessor>();
             services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISuggestionService, SuggestionService>();
             services.AddScoped<IChatReadRepository, ChatReadRepository>();
             services.AddScoped<IMessageReadRepository, MessageReadRepository>();
             services.AddScoped<IUserReadRepository, UserReadRepository>();

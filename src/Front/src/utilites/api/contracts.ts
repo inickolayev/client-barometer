@@ -20,8 +20,18 @@ export type Chat = {
     source: string;
 }
 
+export type Suggestions = {
+    messages: string[];
+}
+
 export type User = {
     id: string;
     sourceId: string;
     source: string;
+}
+
+export type PersonalInfo = {
+    username: string;
+    name: string;
+    age: number;
 }
