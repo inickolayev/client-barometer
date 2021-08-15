@@ -37,9 +37,9 @@ export const Chats: React.FC = () => {
             key: 'id',
         },
         {
-            title: 'SourceId',
-            dataIndex: 'sourceId',
-            key: 'sourceId',
+            title: 'Source',
+            dataIndex: 'source',
+            key: 'source',
         },
         {
             title: 'User',
