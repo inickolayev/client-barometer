@@ -11,6 +11,7 @@ using ClientBarometer.Domain.Repositories;
 using ClientBarometer.Domain.Services;
 using ClientBarometer.Domain.UnitsOfWork;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Requests = ClientBarometer.Contracts.Requests;
 using Responses = ClientBarometer.Contracts.Responses;
 
@@ -23,23 +24,26 @@ namespace ClientBarometer.Implementations.Services
         private readonly IPredictorClient _predictorClient;
         private readonly IChatUnitOfWork _unitOfWork;
         private readonly IMemoryCache _memoryCache;
+        private readonly ILogger<BarometerService> _logger;
 
         public BarometerService(IMessageReadRepository messageReadRepository,
             IBarometerReadRepository barometerReadRepository,
             IPredictorClient predictorClient,
             IChatUnitOfWork unitOfWork,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            ILogger<BarometerService> logger)
         {
             _messageReadRepository = messageReadRepository;
             _barometerReadRepository = barometerReadRepository;
             _predictorClient = predictorClient;
             _unitOfWork = unitOfWork;
             _memoryCache = memoryCache;
+            _logger = logger;
         }
 
         public async Task<Responses.BarometerValue> GetValue(Guid chatId, CancellationToken cancellationToken)
         {
-            int prevValue = 0;
+            int prevValue = BarometerConsts.DEFAULT_BAROMETER_VALUE;
             if (await _barometerReadRepository.Contains(chatId, cancellationToken))
             {
                 prevValue = (await _barometerReadRepository.Get(chatId, cancellationToken)).Value;
@@ -49,13 +53,25 @@ namespace ClientBarometer.Implementations.Services
             {
                 var result = await _memoryCache.GetOrCreateAsync(GetKey(request), async entry =>
                 {
-                    var newResult = await _predictorClient.GetValue(request, cancellationToken);
-                    var newValue = (int) (newResult.Result * 1000);
-                    await CreateOrUpdate(chatId, newValue, cancellationToken);
-                    return new Responses.BarometerValue
+                    var answer = await _predictorClient.SafeGetValue(request, cancellationToken);
+                    if (answer.IsSuccess)
                     {
-                        Value = newValue
-                    };
+                        var newResult = answer.Result.Result; 
+                        var newValue = (int) (newResult * 1000);
+                        await CreateOrUpdate(chatId, newValue, cancellationToken);
+                        return new Responses.BarometerValue
+                        {
+                            Value = newValue
+                        };
+                    }
+                    else
+                    {
+                        _logger.LogError(answer.Error);
+                        return new Responses.BarometerValue
+                        {
+                            Value = prevValue
+                        };
+                    }
                 });
                 return result;
             }

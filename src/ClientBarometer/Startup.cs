@@ -29,12 +29,14 @@ namespace ClientBarometer
     {
         private readonly TelegramBotConfig _telegramBotConfig;
         private readonly PredictorConfig _predictorConfig;
+        private readonly MemoryCacheConfig _memoryCacheConfig;
         
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             _telegramBotConfig = configuration.GetSection("TelegramBot").Get<TelegramBotConfig>();
             _predictorConfig = configuration.GetSection("Predictor").Get<PredictorConfig>();
+            _memoryCacheConfig = configuration.GetSection("MemoryCache").Get<MemoryCacheConfig>();
         }
 
         public IConfiguration Configuration { get; }
@@ -73,7 +75,7 @@ namespace ClientBarometer
             // Services
             services.AddMemoryCache(entry =>
             {
-                entry.ExpirationScanFrequency = TimeSpan.FromMinutes(20);
+                entry.ExpirationScanFrequency = TimeSpan.FromMinutes(_memoryCacheConfig.ExpirationInMinutes);
             });
             services.AddScoped<ISourceProcessor, SourceProcessor>();
             services.AddScoped<IChatService, ChatService>();
