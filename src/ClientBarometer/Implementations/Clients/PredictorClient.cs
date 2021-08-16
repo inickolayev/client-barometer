@@ -19,22 +19,22 @@ namespace ClientBarometer.Implementations.Clients
             _client = new FlurlClient(httpClient);
         }
 
-        public async Task<PredictorResult> GetValue(GetPredictorRequest request, CancellationToken cancellationToken)
+        public async Task<GetPredictorResult> GetValue(GetPredictorRequest request, CancellationToken cancellationToken)
             => await _client
                 .Request("baro")
                 .PostJsonAsync(request, cancellationToken)
-                .ReceiveJson<PredictorResult>();
+                .ReceiveJson<GetPredictorResult>();
 
-        public async Task<OperationResult<PredictorResult>> SafeGetValue(GetPredictorRequest request, CancellationToken cancellationToken)
+        public async Task<OperationResult<GetPredictorResult>> SafeGetValue(GetPredictorRequest request, CancellationToken cancellationToken)
         {
             try
             {
                 var ans = await GetValue(request, cancellationToken);
-                return new OperationResult<PredictorResult>(ans);
+                return new OperationResult<GetPredictorResult>(ans);
             }
             catch (Exception e)
             {
-                return new OperationResult<PredictorResult>(e);
+                return new OperationResult<GetPredictorResult>(e);
             }
         }
     }

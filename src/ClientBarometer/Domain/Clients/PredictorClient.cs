@@ -8,7 +8,7 @@ namespace ClientBarometer.Domain.Clients
 {
     public interface IPredictorClient
     {
-        Task<PredictorResult> GetValue(GetPredictorRequest request, CancellationToken cancellationToken);
-        Task<OperationResult<PredictorResult>> SafeGetValue(GetPredictorRequest request, CancellationToken cancellationToken);
+        Task<GetPredictorResult> GetValue(GetPredictorRequest request, CancellationToken cancellationToken);
+        Task<OperationResult<GetPredictorResult>> SafeGetValue(GetPredictorRequest request, CancellationToken cancellationToken);
     }
 }

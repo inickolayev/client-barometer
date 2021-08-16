@@ -56,7 +56,11 @@ namespace ClientBarometer.Implementations.Services
                     var answer = await _predictorClient.SafeGetValue(request, cancellationToken);
                     if (answer.IsSuccess)
                     {
-                        var newResult = answer.Result.Result; 
+                        var newResult = answer.Result.Result;
+                        if (!string.IsNullOrEmpty(answer.Result.ErrorMessage))
+                        {
+                            _logger.LogError($"Error from predictor: {answer.Result.ErrorMessage}");
+                        }
                         var newValue = (int) (newResult * 1000);
                         await CreateOrUpdate(chatId, newValue, cancellationToken);
                         return new Responses.BarometerValue
