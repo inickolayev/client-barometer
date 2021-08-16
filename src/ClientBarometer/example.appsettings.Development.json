@@ -1,0 +1,9 @@
+{
+  "TelegramBot": {
+    "Token": "<TELEGRAM_TOKEN>",
+    "NgrokHost": "localhost:6020"
+  },
+  "Predictor": {
+    "Host": "http://localhost:5010"
+  }
+}
