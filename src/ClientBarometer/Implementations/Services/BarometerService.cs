@@ -150,10 +150,6 @@ namespace ClientBarometer.Implementations.Services
                     }
                     else if (count == 4)
                     {
-                        if (currentUserId != ChatConsts.DEFAULT_USER_ID)
-                        {
-                            request.CustomerInitMessage = currentMessage;
-                        }
                         break;
                     }
                     
@@ -164,6 +160,10 @@ namespace ClientBarometer.Implementations.Services
                 {
                     currentMessage = string.Join(" ", new[] {currentMessage, message.Text});
                 }
+            }
+            if (currentUserId != ChatConsts.DEFAULT_USER_ID)
+            {
+                request.CustomerInitMessage = currentMessage;
             }
 
             return request;
