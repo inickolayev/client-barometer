@@ -1,130 +1,147 @@
-import dayjs from 'dayjs';
-import React, { CSSProperties, FormEvent } from 'react'
-import { ChatMessage } from '../utilites/api/contracts';
-import { Bubble } from './Bubble'
-import { ApiService } from '../utilites/api/api'
-import { Input, Button, message } from 'antd'
-import { SendOutlined } from '@ant-design/icons';
+import { SendOutlined } from "@ant-design/icons";
+import { Button, Input, message, Spin } from "antd";
+import dayjs from "dayjs";
+import React, { CSSProperties, FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { sessionClient } from "../api/httpClient";
+import useApi from "../api/useApi";
+import { Bubble } from "./Bubble";
+
+const mainContainerStyle: CSSProperties = {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+};
+
+const chatContainerStyle: CSSProperties = {
+    width: "100%",
+    display: "flex",
+    flex: "1 1 0%",
+    flexDirection: "column-reverse",
+    overflow: "auto",
+    paddingLeft: "2.5rem",
+    paddingRight: "2.5rem",
+    paddingBottom: "1rem",
+};
+
+const formStyle: CSSProperties = {
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "100%",
+    display: "flex",
+    padding: "2.5rem",
+};
+
+const inputGroupStyle: CSSProperties = {
+    display: "flex",
+};
+
+const inputStyle: CSSProperties = {
+    width: "100%",
+    borderTopLeftRadius: "0.5rem",
+    borderBottomLeftRadius: "0.5rem",
+    padding: "0.5rem 0.75rem",
+};
+
+const sendButtonStyle: CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    borderTopRightRadius: "0.5rem",
+    borderBottomRightRadius: "0.5rem",
+    padding: "1.2rem 1rem",
+    marginLeft: -1,
+};
+
+const loadingStyle: CSSProperties = {
+    display: "flex",
+    justifyContent: "space-around",
+};
 
 export interface ChatProps {
     username: string;
     chatId: string;
 }
 
-export interface ChatState {
-    messages: ChatMessage[];
-    isLoading: boolean;
-    newMessage: string;
-}
+export const Chat: React.FC<ChatProps> = ({ chatId, username }) => {
+    const [text, setText] = useState<string>("");
 
-const mainContainerStyle :  CSSProperties = {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column"
-}
+    const { firstFetchDone, data, fetch } = useApi({
+        initial: [],
+        fetchData: sessionClient.messages,
+    });
 
-const chatContainerStyle : CSSProperties = {
-    width: "100%",
-    display: "flex",
-    flex: "1 1 0%",
-    flexDirection: 'column-reverse',
-    overflow: "auto",
-    paddingLeft: "2.5rem",
-    paddingRight: "2.5rem",
-    paddingBottom: "1rem"
-};
+    const timer = useRef<NodeJS.Timer>();
 
-const formStyle = {
-    marginLeft: "auto",
-    marginRight: "auto",
-    width: "100%",
-    display: "flex",
-    padding: "2.5rem",
-}
-
-const inputStyle = {
-    width: "100%",
-}
-
-const sendButtonStyle = {
-    display: "flex",
-    alignItems: "center"
-}
-
-export class Chat extends React.Component<ChatProps, ChatState> {
-    apiService = new ApiService();
-    timer?: NodeJS.Timer
-
-    constructor(props: ChatProps)
-    {
-        super(props);
-        this.state = { isLoading: true, messages: [], newMessage: "" }
-        this.loadData();
-        this.timer = setInterval(async () => await this.loadData(), 1000);
-    }
-
-    async loadData() {
-        const { chatId } = this.props;
-        const newMessages = await this.apiService.getMessages(chatId);
-        if (newMessages.success) {
-            await this.setState({ isLoading: false, messages: newMessages.data });
+    const fetchMore = useCallback(async () => {
+        if (timer.current) {
+            clearInterval(timer.current);
         }
-    }
+        try {
+            await fetch(chatId);
+        } catch (e) {
+            message.error(e.message);
+        }
+        timer.current = setInterval(fetchMore, 3000);
+    }, [chatId, fetch]);
 
-    async onSend(e: FormEvent<HTMLFormElement>) {
+    useEffect(() => {
+        fetchMore();
+    }, [fetchMore]);
+
+    const onSend = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const { chatId } = this.props;
-        const { newMessage } = this.state;
-        const resp = await this.apiService.sendMessage(chatId, this.state.newMessage);
-        if (resp.success) {
-            this.setState({ newMessage: "" })
-        } else {
-            message.error("Error sending message")
+        try {
+            await sessionClient.send({ chatId, text });
+            setText("");
+        } catch (error) {
+            message.error("Error sending message");
         }
-    }
+    };
 
-    onMessageChange(message: string) {
-        this.setState({ newMessage: message });
-    }
+    const spinner = (
+        <div style={loadingStyle}>
+            <div>
+                <Spin />
+                <span> Loading...</span>
+            </div>
+        </div>
+    );
 
-    render() {
-        const { isLoading, messages, newMessage } = this.state;
-        const { username } = this.props;
-
-        return (
-            <div style={mainContainerStyle}>
-                <div style={chatContainerStyle}>
-                    {
-                        isLoading
-                        ? "loading..."
-                        : messages.map((data) =>
-                            <Bubble right={username === data.username}
-                                username={data.username}
-                                time={dayjs(data.createdAt).format("HH:mm")}
-                                message={data.text}
-                                key={data.id}
-                            />
-                        )
-                    }
-                    {/* {
+    return (
+        <div style={mainContainerStyle}>
+            <div style={chatContainerStyle}>
+                {!firstFetchDone
+                    ? spinner
+                    : data.map((item) => (
+                          <Bubble
+                              right={username === item.username}
+                              username={item.username}
+                              time={dayjs(item.createdAt).format("HH:mm")}
+                              message={item.text}
+                              key={item.id}
+                          />
+                      ))}
+                {/* {
                         hasNextPage && (
                             <div className="flex self-center my-2">
                             <a className="ease transition-all delay-75 bg-gray-600 text-center text-sm text-white rounded-full p-2 px-5 cursor-pointer hover:bg-gray-800" onClick={() => fetchNextPage()}>Earlier messages</a>
                             </div>
                             )
                         } */}
-                </div>
-                <form style={formStyle} onSubmit={(e) => this.onSend(e)}>
+            </div>
+            <form style={formStyle} onSubmit={onSend}>
+                <Input.Group style={inputGroupStyle}>
                     <Input
                         required={true}
                         style={inputStyle}
-                        value={newMessage}
-                        onChange={({ target: { value } }) => this.onMessageChange(value)}
+                        value={text}
+                        onChange={({ target: { value } }) => setText(value)}
                         placeholder="Message..."
                     />
-                    <Button style={sendButtonStyle} htmlType="submit" icon={<SendOutlined/>} >Send</Button>
-                </form>
-            </div>
-        );
-    }
-}
+                    <Button style={sendButtonStyle} htmlType="submit">
+                        Send <SendOutlined />
+                    </Button>
+                </Input.Group>
+            </form>
+        </div>
+    );
+};

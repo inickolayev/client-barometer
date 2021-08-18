@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace ClientBarometer.Controllers
 {
     [ApiController]
     [Route("session")]
-    public class SessionController : ControllerBase
+    public class SessionController : BaseApiController
     {
         private readonly IChatService _chatService;
         private readonly ISourceProcessor _sourceProcessor;
@@ -39,6 +40,7 @@ namespace ClientBarometer.Controllers
         }
 
         [HttpGet("messages")]
+        [ProducesResponseType(typeof(IEnumerable<Message>), 200)]
         public async Task<IEnumerable<Message>> GetMessages(Guid chatId, CancellationToken cancellationToken)
             => await _chatService.GetMessages(chatId, ChatConsts.MESSAGES_TAKE_DEFAULT, cancellationToken);
                 
@@ -53,6 +55,7 @@ namespace ClientBarometer.Controllers
         }
         
         [HttpGet("chats")]
+        [ProducesResponseType(typeof(IEnumerable<Chat>), 200)]
         public async Task<IActionResult> GetChats(CancellationToken cancellationToken)
         {
             var chats = await _chatService.GetChats(cancellationToken);
@@ -60,6 +63,7 @@ namespace ClientBarometer.Controllers
         }
                 
         [HttpGet("user")]
+        [ProducesResponseType(typeof(User), 200)]
         public async Task<IActionResult> GetUser(Guid chatId, CancellationToken cancellationToken)
         {
             var user = await _chatService.GetUser(chatId, cancellationToken);
@@ -67,11 +71,13 @@ namespace ClientBarometer.Controllers
         }
 
         [HttpGet("barometer")]
+        [ProducesResponseType(typeof(BarometerValue), 200)]
         public async Task<BarometerValue> GetBarometerValue(Guid chatId, CancellationToken cancellationToken)
             => await _barometerService.GetValue(chatId, cancellationToken);
 
 
         [HttpGet("suggestions")]
+        [ProducesResponseType(typeof(Suggestions), 200)]
         public async Task<Suggestions> GetSuggestions(Guid chatId, CancellationToken cancellationToken)
             => await _suggestionService.GetSuggestions(chatId, cancellationToken);
     }

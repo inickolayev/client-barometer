@@ -1,48 +1,68 @@
-import React, { Component, useCallback, useEffect, useState } from 'react';
-import { Button, Card, message, Space, Spin, Table } from 'antd';
-import { Link, useRouteMatch } from "react-router-dom";
-import { Chat, PersonalInfo, Suggestions } from '../utilites/api/contracts';
-import { ApiService } from '../utilites/api/api';
+import { Button, message, Spin } from "antd";
+import React, { useCallback, useEffect, useRef } from "react";
+import { sessionClient } from "../api/httpClient";
+import useApi from "../api/useApi";
 
 type SuggestionsProps = {
     chatId: string;
-}
+};
 
 const buttonStyle = {
-    margin: "0.5rem"
-}
+    margin: "0.5rem",
+};
 
-const apiService = new ApiService();
- 
 export const SuggestionsCard: React.FC<SuggestionsProps> = ({ chatId }) => {
-    const [ suggestions, setSuggestions ] = useState<Suggestions>();
+    const {
+        firstFetchDone,
+        data: suggestions,
+        fetch,
+    } = useApi({
+        initial: {},
+        fetchData: sessionClient.suggestions,
+    });
 
-    const uploadData = async () => {
-        const result = await apiService.getSuggestions(chatId);
-        if (result.success) {
-            await setSuggestions(result.data);
+    const timer = useRef<NodeJS.Timer>();
+
+    const fetchMore = useCallback(async () => {
+        if (timer.current) {
+            clearInterval(timer.current);
         }
-    }
+        try {
+            await fetch(chatId);
+        } catch (e) {
+            message.error(e.message);
+        }
+        timer.current = setInterval(fetchMore, 3000);
+    }, [chatId, fetch]);
+
     useEffect(() => {
-        setInterval(async () => await uploadData(), 1000);
-    }, [chatId]);
+        fetchMore();
+    }, [fetchMore]);
 
-    const onClick = (newMessage: string) => async () => {
-        const resp = await apiService.sendMessage(chatId, newMessage);
-        if (!resp.success) {
-            message.error("Error sending message")
+    const onClick = (text: string) => async () => {
+        try {
+            await sessionClient.send({
+                chatId,
+                text,
+            });
+        } catch (error) {
+            message.error("Error sending message");
         }
+    };
+
+    if (!firstFetchDone) {
+        return <Spin />;
     }
 
-    if (!suggestions) {
-        return <Spin />
-    } else {
-        const { messages } = suggestions;
-        
-        return (<>
-            {messages.map((message, i) =>
-                <Button key={i} type="primary" style={buttonStyle} onClick={onClick(message)}>{message}</Button>
-            )}
-        </>);
-    }
-}
+    const { messages } = suggestions;
+
+    return (
+        <>
+            {messages?.map((message, index) => (
+                <Button key={index} type="primary" style={buttonStyle} onClick={onClick(message)}>
+                    {message}
+                </Button>
+            ))}
+        </>
+    );
+};

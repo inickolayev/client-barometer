@@ -1,0 +1,41 @@
+{
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "editor.formatOnSave": true,
+    "css.validate": false,
+    "stylelint.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.stylelint": true
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "cSpell.enabledLanguageIds": [
+        "git-commit",
+        "latex",
+        "markdown",
+        "plaintext",
+        "restructuredtext",
+        "text",
+        "typescript",
+        "typescriptreact"
+    ],
+    "cSpell.words": [],
+    "cSpell.language": "ru,en,en-GB,en-US,ru-RU",
+    "cSpell.enabled": true,
+    "todo-tree.tree.scanMode": "workspace only"
+}
