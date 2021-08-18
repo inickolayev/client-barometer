@@ -1,44 +1,52 @@
-import React, { Component, useCallback, useEffect, useState } from 'react';
-import { Card, Space, Spin, Table } from 'antd';
-import { Link, useRouteMatch } from "react-router-dom";
-import { Chat, PersonalInfo } from '../utilites/api/contracts';
-import { ApiService } from '../utilites/api/api';
+import { Card, message, Spin } from "antd";
+import React, { useEffect } from "react";
+import { userClient } from "../api/httpClient";
+import useApi from "../api/useApi";
 
 type PersonalInfoCardProps = {
     userId: string;
-}
+};
 
 const cardStyle = {
     width: "22rem",
-    margin: "1rem 1rem 2rem 1rem"
-}
+    margin: "1rem 1rem 2rem 1rem",
+};
 
-const apiService = new ApiService();
- 
+
 export const PersonalInfoCard: React.FC<PersonalInfoCardProps> = ({ userId }) => {
-    const [ info, setInfo ] = useState<PersonalInfo>();
+    const {
+        loading,
+        data: info,
+        fetch,
+    } = useApi({
+        initial: {},
+        fetchData: userClient.info,
+    });
 
-    const uploadData = async () => {
-        const result = await apiService.getPersonalInfo(userId);
-        if (result.success) {
-            await setInfo(result.data);
-        }
-    }
     useEffect(() => {
-        uploadData()
-    }, [userId]);
+        fetch(userId).catch((e) => message.error(e.message));;
+    }, [userId, fetch]);
 
-    if (!info) {
-        return <Spin />
-    } else {
-        const { username, name, age } = info;
-        
-        return (<>
-            <Card title="Personal info" style={cardStyle}>
-                <p><b>Username: </b><span>{username}</span></p>
-                <p><b>Name: </b><span>{name}</span></p>
-                <p><b>Age: </b><span>{age}</span></p>
-            </Card>
-        </>);
+    if (loading) {
+        return <Spin />;
     }
-}
+
+    const { username, name, age } = info;
+
+    return (
+        <Card title="Personal info" style={cardStyle}>
+            <p>
+                <b>Username: </b>
+                <span>{username}</span>
+            </p>
+            <p>
+                <b>Name: </b>
+                <span>{name}</span>
+            </p>
+            <p>
+                <b>Age: </b>
+                <span>{age}</span>
+            </p>
+        </Card>
+    );
+};

@@ -1,53 +1,54 @@
-import React, { Component } from 'react';
-import ReactSpeedometer from "react-d3-speedometer"
-import { createUseStyles } from 'react-jss';
-import { ApiService } from '../utilites/api/api';
-
-type BarometerProps = {
-    chatId: string
-}
-
-type BarometerState = {
-    barometer: number;
-    isLoading: boolean;
-}
+import { message, Spin } from "antd";
+import React, { CSSProperties, useCallback, useEffect, useRef } from "react";
+import ReactSpeedometer from "react-d3-speedometer";
+import { sessionClient } from "../api/httpClient";
+import useApi from "../api/useApi";
 
 const minValue = 0;
 const maxValue = 1000;
 
-export class Barometer extends Component<BarometerProps, BarometerState> {
-    apiService = new ApiService();
-    timer?: NodeJS.Timer
+type BarometerProps = {
+    chatId: string;
+};
 
-    constructor(props: BarometerProps)
-    {
-        super(props);
-        this.state = { isLoading: true, barometer: 0 }
-        this.loadData();
-        this.timer = setInterval(async () => await this.loadData(), 1000);
-    }
+export const Barometer: React.FC<BarometerProps> = ({ chatId }) => {
+    const { firstFetchDone, data, fetch } = useApi({
+        initial: {},
+        fetchData: sessionClient.barometer,
+    });
 
-    async loadData() {
-        const { chatId } = this.props
-        const newBarometer = await this.apiService.getBarometer(chatId);
-        if (newBarometer.success) {
-            await this.setState({ isLoading: false, barometer: newBarometer.data.value });
+    const timer = useRef<NodeJS.Timer>();
+
+    const fetchMore = useCallback(async () => {
+        if (timer.current) {
+            clearInterval(timer.current);
         }
+        try {
+            await fetch(chatId);
+        } catch (e) {
+            message.error(e.message);
+        }
+        timer.current = setInterval(fetchMore, 3000);
+    }, [chatId, fetch]);
+
+    useEffect(() => {
+        fetchMore();
+    }, [fetchMore]);
+
+    if (!firstFetchDone) {
+        return <Spin />;
     }
 
-    render() {
-        const { isLoading, barometer } = this.state;
-        return (
-            <div style={style}>
-                <ReactSpeedometer value={barometer} maxValue={maxValue} minValue={minValue} />
-            </div>
-        );
-    }
-}
+    return (
+        <div style={style}>
+            <ReactSpeedometer value={data.value} maxValue={maxValue} minValue={minValue} />
+        </div>
+    );
+};
 
-const style = {
+const style: CSSProperties = {
     width: "40rem",
     height: "13rem",
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
 };

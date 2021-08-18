@@ -29,7 +29,12 @@ namespace ClientBarometer.Controllers
             _chatService = chatService;
             _sourceProcessor = sourceProcessor;
         }
-        
+
+        [HttpGet]
+        public async Task<User> GetAsync()
+        {
+            return await _client.GetMeAsync();
+        }
         
         [HttpPost]
         public async Task HandleAsync(Update update, CancellationToken token)

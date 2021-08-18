@@ -18,6 +18,7 @@ export type Chat = {
     id: string;
     sourceId: string;
     source: string;
+    username: string;
 }
 
 export type BarometerResult = {

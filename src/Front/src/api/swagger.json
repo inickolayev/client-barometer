@@ -1,0 +1,1993 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Storage API",
+    "version": "v1"
+  },
+  "paths": {
+    "/session/messages": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.Message"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.Message"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.Message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/send": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientBarometer.Contracts.Requests.CreateMessageRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientBarometer.Contracts.Requests.CreateMessageRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientBarometer.Contracts.Requests.CreateMessageRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientBarometer.Contracts.Requests.CreateMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/session/chats": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.Chat"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.Chat"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.Chat"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/user": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.User"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.User"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/barometer": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.BarometerValue"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.BarometerValue"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.BarometerValue"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/session/suggestions": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.Suggestions"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.Suggestions"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.Suggestions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TelegramBot": {
+      "get": {
+        "tags": [
+          "TelegramBot"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TelegramBot"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Telegram.Bot.Types.Update"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Telegram.Bot.Types.Update"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Telegram.Bot.Types.Update"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Telegram.Bot.Types.Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/user/info": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.PersonalInfo"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.PersonalInfo"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.PersonalInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/WeatherForecast": {
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.WeatherForecast"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.WeatherForecast"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientBarometer.Contracts.Responses.WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ClientBarometer.Contracts.Responses.Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "chatId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ClientBarometer.Contracts.Requests.CreateMessageRequest": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatSourceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userSourceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "text": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ClientBarometer.Contracts.Responses.Chat": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ClientBarometer.Contracts.Responses.User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ClientBarometer.Contracts.Responses.BarometerValue": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ClientBarometer.Contracts.Responses.Suggestions": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isBot": {
+            "type": "boolean"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "languageCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "canJoinGroups": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "canReadAllGroupMessages": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "supportsInlineQueries": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Enums.ChatType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Telegram.Bot.Types.ChatPhoto": {
+        "type": "object",
+        "properties": {
+          "bigFileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "bigFileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "smallFileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "smallFileUniqueId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.ChatPermissions": {
+        "type": "object",
+        "properties": {
+          "canSendMessages": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "canSendMediaMessages": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "canSendPolls": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "canSendOtherMessages": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "canAddWebPagePreviews": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "canChangeInfo": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "canInviteUsers": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "canPinMessages": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Chat": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "type": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Enums.ChatType"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "allMembersAreAdministrators": {
+            "type": "boolean",
+            "deprecated": true
+          },
+          "photo": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.ChatPhoto"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "inviteLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "pinnedMessage": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Message"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.ChatPermissions"
+          },
+          "slowModeDelay": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "stickerSetName": {
+            "type": "string",
+            "nullable": true
+          },
+          "canSetStickerSet": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Enums.MessageEntityType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Telegram.Bot.Types.MessageEntity": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Enums.MessageEntityType"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "length": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "language": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.PhotoSize": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Audio": {
+        "type": "object",
+        "properties": {
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "performer": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "mimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "thumb": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.PhotoSize"
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Document": {
+        "type": "object",
+        "properties": {
+          "thumb": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.PhotoSize"
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Animation": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "thumb": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.PhotoSize"
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Game": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "photo": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.PhotoSize"
+            },
+            "nullable": true
+          },
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "textEntities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.MessageEntity"
+            },
+            "nullable": true
+          },
+          "animation": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Animation"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Enums.MaskPositionPoint": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Telegram.Bot.Types.MaskPosition": {
+        "type": "object",
+        "properties": {
+          "point": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Enums.MaskPositionPoint"
+          },
+          "xShift": {
+            "type": "number",
+            "format": "float"
+          },
+          "yShift": {
+            "type": "number",
+            "format": "float"
+          },
+          "scale": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Sticker": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isAnimated": {
+            "type": "boolean"
+          },
+          "thumb": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.PhotoSize"
+          },
+          "emoji": {
+            "type": "string",
+            "nullable": true
+          },
+          "setName": {
+            "type": "string",
+            "nullable": true
+          },
+          "maskPosition": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.MaskPosition"
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Video": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "thumb": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.PhotoSize"
+          },
+          "mimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Voice": {
+        "type": "object",
+        "properties": {
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.VideoNote": {
+        "type": "object",
+        "properties": {
+          "length": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "thumb": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.PhotoSize"
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Contact": {
+        "type": "object",
+        "properties": {
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vcard": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Location": {
+        "type": "object",
+        "properties": {
+          "longitude": {
+            "type": "number",
+            "format": "float"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Venue": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Location"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "foursquareId": {
+            "type": "string",
+            "nullable": true
+          },
+          "foursquareType": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.PollOption": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "voterCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Poll": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "question": {
+            "type": "string",
+            "nullable": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.PollOption"
+            },
+            "nullable": true
+          },
+          "totalVoterCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isClosed": {
+            "type": "boolean"
+          },
+          "isAnonymous": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "allowsMultipleAnswers": {
+            "type": "boolean"
+          },
+          "correctOptionId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "explanation": {
+            "type": "string",
+            "nullable": true
+          },
+          "explanationEntities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.MessageEntity"
+            },
+            "nullable": true
+          },
+          "openPeriod": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "closeDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Dice": {
+        "type": "object",
+        "properties": {
+          "emoji": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Payments.Invoice": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "startParameter": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Payments.ShippingAddress": {
+        "type": "object",
+        "properties": {
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "streetLine1": {
+            "type": "string",
+            "nullable": true
+          },
+          "streetLine2": {
+            "type": "string",
+            "nullable": true
+          },
+          "postCode": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Payments.OrderInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddress": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Payments.ShippingAddress"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Payments.SuccessfulPayment": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invoicePayload": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingOptionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderInfo": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Payments.OrderInfo"
+          },
+          "telegramPaymentChargeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "providerPaymentChargeId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Passport.PassportFile": {
+        "type": "object",
+        "properties": {
+          "fileDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUniqueId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Passport.EncryptedPassportElement": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "hash": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.Passport.PassportFile"
+            },
+            "nullable": true
+          },
+          "frontSide": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Passport.PassportFile"
+          },
+          "reverseSide": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Passport.PassportFile"
+          },
+          "selfie": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Passport.PassportFile"
+          },
+          "translation": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.Passport.PassportFile"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Passport.EncryptedCredentials": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "hash": {
+            "type": "string",
+            "nullable": true
+          },
+          "secret": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Passport.PassportData": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.Passport.EncryptedPassportElement"
+            },
+            "nullable": true
+          },
+          "credentials": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Passport.EncryptedCredentials"
+          }
+        }
+      },
+      "Telegram.Bot.Types.LoginUrl": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "forwardText": {
+            "type": "string",
+            "nullable": true
+          },
+          "botUsername": {
+            "type": "string",
+            "nullable": true
+          },
+          "requestWriteAccess": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Telegram.Bot.Types.CallbackGame": {
+        "type": "object"
+      },
+      "Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "loginUrl": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.LoginUrl"
+          },
+          "callbackData": {
+            "type": "string",
+            "nullable": true
+          },
+          "switchInlineQuery": {
+            "type": "string",
+            "nullable": true
+          },
+          "switchInlineQueryCurrentChat": {
+            "type": "string",
+            "nullable": true
+          },
+          "callbackGame": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.CallbackGame"
+          },
+          "pay": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup": {
+        "type": "object",
+        "properties": {
+          "inlineKeyboard": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton"
+              }
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Enums.MessageType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Telegram.Bot.Types.Message": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "from": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "chat": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Chat"
+          },
+          "isForwarded": {
+            "type": "boolean",
+            "readOnly": true,
+            "deprecated": true
+          },
+          "forwardFrom": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "forwardFromChat": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Chat"
+          },
+          "forwardFromMessageId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "forwardSignature": {
+            "type": "string",
+            "nullable": true
+          },
+          "forwardSenderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "forwardDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "replyToMessage": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Message"
+          },
+          "viaBot": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "editDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mediaGroupId": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorSignature": {
+            "type": "string",
+            "nullable": true
+          },
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "entities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.MessageEntity"
+            },
+            "nullable": true
+          },
+          "entityValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "captionEntities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.MessageEntity"
+            },
+            "nullable": true
+          },
+          "captionEntityValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "audio": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Audio"
+          },
+          "document": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Document"
+          },
+          "animation": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Animation"
+          },
+          "game": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Game"
+          },
+          "photo": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.PhotoSize"
+            },
+            "nullable": true
+          },
+          "sticker": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Sticker"
+          },
+          "video": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Video"
+          },
+          "voice": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Voice"
+          },
+          "videoNote": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.VideoNote"
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "contact": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Contact"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Location"
+          },
+          "venue": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Venue"
+          },
+          "poll": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Poll"
+          },
+          "dice": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Dice"
+          },
+          "newChatMembers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+            },
+            "nullable": true
+          },
+          "leftChatMember": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "newChatTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "newChatPhoto": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Telegram.Bot.Types.PhotoSize"
+            },
+            "nullable": true
+          },
+          "deleteChatPhoto": {
+            "type": "boolean"
+          },
+          "groupChatCreated": {
+            "type": "boolean"
+          },
+          "supergroupChatCreated": {
+            "type": "boolean"
+          },
+          "channelChatCreated": {
+            "type": "boolean"
+          },
+          "migrateToChatId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "migrateFromChatId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pinnedMessage": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Message"
+          },
+          "invoice": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Payments.Invoice"
+          },
+          "successfulPayment": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Payments.SuccessfulPayment"
+          },
+          "connectedWebsite": {
+            "type": "string",
+            "nullable": true
+          },
+          "passportData": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Passport.PassportData"
+          },
+          "replyMarkup": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup"
+          },
+          "type": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Enums.MessageType"
+          }
+        }
+      },
+      "Telegram.Bot.Types.InlineQuery": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "from": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "query": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Location"
+          },
+          "offset": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.ChosenInlineResult": {
+        "type": "object",
+        "properties": {
+          "resultId": {
+            "type": "string",
+            "nullable": true
+          },
+          "from": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Location"
+          },
+          "inlineMessageId": {
+            "type": "string",
+            "nullable": true
+          },
+          "query": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.CallbackQuery": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "from": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "message": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Message"
+          },
+          "inlineMessageId": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatInstance": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "gameShortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isGameQuery": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Payments.ShippingQuery": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "from": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "invoicePayload": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingAddress": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Payments.ShippingAddress"
+          }
+        }
+      },
+      "Telegram.Bot.Types.Payments.PreCheckoutQuery": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "from": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invoicePayload": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingOptionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderInfo": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Payments.OrderInfo"
+          }
+        }
+      },
+      "Telegram.Bot.Types.PollAnswer": {
+        "type": "object",
+        "properties": {
+          "pollId": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.User"
+          },
+          "optionIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Telegram.Bot.Types.Enums.UpdateType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Telegram.Bot.Types.Update": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Message"
+          },
+          "editedMessage": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Message"
+          },
+          "inlineQuery": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.InlineQuery"
+          },
+          "chosenInlineResult": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.ChosenInlineResult"
+          },
+          "callbackQuery": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.CallbackQuery"
+          },
+          "channelPost": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Message"
+          },
+          "editedChannelPost": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Message"
+          },
+          "shippingQuery": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Payments.ShippingQuery"
+          },
+          "preCheckoutQuery": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Payments.PreCheckoutQuery"
+          },
+          "poll": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Poll"
+          },
+          "pollAnswer": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.PollAnswer"
+          },
+          "type": {
+            "$ref": "#/components/schemas/Telegram.Bot.Types.Enums.UpdateType"
+          }
+        }
+      },
+      "ClientBarometer.Contracts.Responses.PersonalInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "age": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ClientBarometer.Contracts.Responses.WeatherForecast": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "temperatureC": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperatureF": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

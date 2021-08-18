@@ -1,21 +1,22 @@
-import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Container } from 'reactstrap';
-import { NavMenu } from './NavMenu';
+import React, { CSSProperties } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { Container } from "reactstrap";
+import { NavMenu } from "./NavMenu";
 
-export class Layout extends Component {
-  static displayName = Layout.name;
-
-  render () {
+export const Layout: React.FC = ({ children }) => {
     return (
-      <div>
-        <BrowserRouter>
-          <NavMenu />
-          <Container style={{ width: "100%", maxWidth: "100%", margin: 0, padding: 0 }}>
-            {this.props.children}
-          </Container>
-        </BrowserRouter>
-      </div>
+        <div>
+            <BrowserRouter>
+                <NavMenu />
+                <Container style={containerStyle}>{children}</Container>
+            </BrowserRouter>
+        </div>
     );
-  }
-}
+};
+
+const containerStyle: CSSProperties = {
+    width: "100%",
+    maxWidth: "100%",
+    margin: 0,
+    padding: 0,
+};
